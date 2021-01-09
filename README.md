@@ -1,14 +1,14 @@
-# SkyLookup
+# SkySQL
 
 Demo: https://siasky.net/_AYYC9KGq009LF8mD1D2J6yjCoBm0i9yLR64pTX3aOWL6Q/index.html (13 million rows, 615 MB total size)
 
 While [MiniSearch](https://github.com/lucaong/minisearch) and [AlaSQL](http://alasql.org/) are great in-browser full-text & SQL engines,
 they can not handle GBs of data because of RAM limits.
-SkyLookup is a bit different. It is a modified [Radix-tree](https://en.wikipedia.org/wiki/Radix_tree) (or radix trie) based file index.
+SkySQL is a bit different. It is a modified [Radix-tree](https://en.wikipedia.org/wiki/Radix_tree) (or radix trie) based file index.
 
 # Performance
 
-SkyLookup stores the data in alphabetical order in multiple files, and even if you has a tons of data, it will make only a few HTTP AJAX requests to find something:
+SkySQL stores the data in alphabetical order in multiple files, and even if you has a tons of data, it will make only a few HTTP AJAX requests to find something:
 
 - 1000 rows = 1 ajax request
 - 1 million rows = 2 requests
@@ -21,7 +21,7 @@ file in a Skynet registry, so your users can access the updated database on the 
 
 # Use-case examples
 
-Presonally, I'll use SkyLookup to host [SkyLive](https://skylive.coolhd.hu) 100% to Skynet and to make a fully decentralized search engine, [DappDappGo](https://dappdappgo.coolhd.hu).
+Presonally, I'll use SkySQL to host [SkyLive](https://skylive.coolhd.hu) 100% to Skynet and to make a fully decentralized search engine, [DappDappGo](https://dappdappgo.coolhd.hu).
 You can create a searchable dictionary or a decentralized Twitter where users can find other users profile pictures, etc.
 
 
