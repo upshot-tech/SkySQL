@@ -1,5 +1,5 @@
 {
-  "name": "skylookup",
+  "name": "skysql",
   "version": "1.0.0",
   "description": "tree-based key-value database for Sia Skynet",
   "main": "index.js",
@@ -8,12 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DaWe35/SkyLookup.git"
+    "url": "git+https://github.com/DaWe35/SkySQL.git"
   },
-  "author": "",
+  "author": "DaWe",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DaWe35/SkyLookup/issues"
+    "url": "https://github.com/DaWe35/SkySQL/issues"
   },
-  "homepage": "https://github.com/DaWe35/SkyLookup#readme"
+  "homepage": "https://github.com/DaWe35/SkySQL#readme",
+  "dependencies": {
+    "config": "^3.3.3"
+  }
 }
