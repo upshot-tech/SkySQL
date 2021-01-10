@@ -1,12 +1,18 @@
 {
+	// Put your database credentials here
 	"dbConfig": {
 		"host": "127.0.0.1",
 		"port": 3306,
 		"password": "",
-		"dbName": "",
-		"dbTable": ""
+		"dbName": ""
 	},
-	"columns": [ "id", "username", "tokens" ],
-	"indexBy": "users"
+	// Enter tables and columns you want to export.
+	// Please specify indexes for columns you want to ORDER BY later.
+	"tables": [
+		{
+			"name": "",
+			"columns": [ "id", "username", "tokens" ],
+			"indexes": [ "users" ]
+		}
+	]
 }
-  
