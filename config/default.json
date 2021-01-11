@@ -1,16 +1,17 @@
 {
 	// Put your database credentials here
 	"dbConfig": {
+		"type": "mysql", // mysql
 		"host": "127.0.0.1",
-		"port": 3306,
+		"user": "root",
 		"password": "",
-		"dbName": ""
+		"database": ""
 	},
 	// Enter tables and columns you want to export.
 	// Please specify indexes for columns you want to ORDER BY later.
 	"tables": [
 		{
-			"name": "",
+			"name": "test",
 			"columns": [ "id", "username", "tokens" ],
 			"indexes": [ "users" ]
 		}

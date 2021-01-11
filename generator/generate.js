@@ -1,15 +1,17 @@
 const { initDataFolder } = require('./utils');
-const { generateExampleDict } = require('./sample_data');
 fs = require('fs');
 const noop = () => {};
 
 
 initDataFolder()
 
-
-console.log('Generation example data')
-var data = generateExampleDict(3)
-
+/* 
+for tables:
+	get primary index
+	create data table
+	for indexes:
+		create index tables
+ */
 
 console.log('Sorting', data.length, 'rows')
 data.sort(function(x, y) {
