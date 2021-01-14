@@ -4,27 +4,17 @@ class SkyLookUp {
 	}
 
 	lookup(searchText, callback) {
-		function changePrint(msg = null) {
-			if (typeof document.getElementById('print') !== 'undefined') {
-				if (msg == null) {
-					document.getElementById('print').innerHTML = '...'
-				} else {
-					document.getElementById('print').innerHTML = msg
-				}
-			}
-		}
 	
 		function ajaxGet(url) {
 			var xhttp = new XMLHttpRequest()
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					changePrint(null) // remove print warning
 					parseData(this.responseText)
 				} else if (this.readyState == 4 && this.status == 0) {
-					changePrint(`CORS blocked, please open this file without the 'file:///"" protocol
-									(you can use any localhost server or just upload the folder to Skynet)`)
+					callback(`CORS blocked, please open this file without the 'file:///"" protocol
+						(you can use any localhost server or just upload the folder to Skynet)`, null)
 				} else if (this.readyState == 4) {
-					changePrint('Error reading remote file, status code: ' + this.status)
+					callback('Error reading remote file, status code: ' + this.status, null)
 				}
 			};
 			xhttp.open("GET", url, true)
@@ -65,9 +55,12 @@ class SkyLookUp {
 				for (var i = 0; i < lines.length; i++){
 					if (lines[i].startsWith(searchText + ' ')) {
 						let words = lines[i].split(/ (.*)/)
-						callback(words[1])
-						console.log('index found:', words[0])
-						console.log(JSON.parse(words[1]))
+						callback(null, words[1])
+						try {
+							console.log(JSON.parse(words[1]))
+						} catch(err) {
+							console.log('index found:', words[0])
+						}
 						return
 					}
 				}

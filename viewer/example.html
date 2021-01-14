@@ -3,11 +3,26 @@
 	let skylookup = new SkyLookUp('data/index.txt');
 	function search() {
 		let str = document.getElementById('input_str').value
+		changePrint()
 		skylookup.lookup(str, searchCallback)
 	}
 
-	function searchCallback(result) {
-		document.getElementById('print').innerHTML = result
+	function searchCallback(err, result) {
+		if(err) {
+			changePrint(err)
+		} else {
+			changePrint(result)
+		}
+	}
+
+	function changePrint(msg = null) {
+		if (typeof document.getElementById('print') !== 'undefined') {
+			if (msg == null) {
+				document.getElementById('print').innerHTML = '...'
+			} else {
+				document.getElementById('print').innerHTML = msg
+			}
+		}
 	}
 </script>
 
