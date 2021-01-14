@@ -67,6 +67,7 @@ class SkyLookUp {
 						let words = lines[i].split(/ (.*)/)
 						callback(words[1])
 						console.log('index found:', words[0])
+						console.log(JSON.parse(words[1]))
 						return
 					}
 				}
