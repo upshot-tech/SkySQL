@@ -38,15 +38,15 @@ class SkyLookUp {
 		function parseData(response) {
 			let lines = getLines(response)
 			let firstLine = lines[0]
-			let splittedLine = firstLine.split(' ')
-			if (splittedLine[0] == 'index') {
+			let splittedFirstLine = firstLine.split(/ (.*)/)	// split string by first space
+			if (splittedFirstLine[0] == 'index') {
 				let lastWord = null
 				let found = null
 				for (var i = 0; i < lines.length; i++){
 					if (typeof lines[i+1] == 'undefined') {
-						found = lines[i].split(' ')[1]
+						found = lines[i].split(/ (.*)/)[1]
 					} else {
-						var words = lines[i+1].split(' ')
+						var words = lines[i+1].split(/ (.*)/)
 						if (words[0] > searchText || lines[i+1] == '\n' || lines[i+1] == '') {
 							found = lastWord
 							console.log('found', found)
@@ -61,10 +61,10 @@ class SkyLookUp {
 						break;
 					}
 				}
-			} else if (splittedLine[0] == 'final') {
+			} else if (splittedFirstLine[0] == 'final') {
 				for (var i = 0; i < lines.length; i++){
 					if (lines[i].startsWith(searchText + ' ')) {
-						let words = lines[i].split(' ')
+						let words = lines[i].split(/ (.*)/)
 						callback(words[1])
 						console.log('index found:', words[0])
 						return
