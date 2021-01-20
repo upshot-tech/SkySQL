@@ -26,3 +26,13 @@ exports.initDataFolder = function initDataFolder() {
         console.log('source.txt was copied to destination.txt');
     });
 }
+
+exports.sortByKey = function sortByKey(x, y) {
+    if (x[0] < y[0]) {
+        return -1;
+    }
+    if (x[0] > y[0]) {
+        return 1;
+    }
+    return 0;
+}
