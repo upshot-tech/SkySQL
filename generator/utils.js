@@ -1,9 +1,9 @@
-const dir = __dirname + '/../dist';
-const noop = () => {};
+const dir = __dirname + '/../dist'
+const noop = () => {}
 
 touchDir = function touchDir(folder) {
 	if (!fs.existsSync(folder)){
-		fs.mkdirSync(folder);
+		fs.mkdirSync(folder)
 		return true
 	} else {
 		return false
@@ -17,24 +17,24 @@ exports.initDataFolder = function initDataFolder() {
     }
     
     fs.copyFile( __dirname + '/../viewer/example.html', dir + '/index.html', (err) => {
-        if (err) throw err;
-        console.log('example.html was copied to index.html');
-    });
+        if (err) throw err
+        console.log('example.html was copied to index.html')
+    })
     
     fs.copyFile(__dirname + '/../viewer/lookup.js', dir + '/lookup.js', (err) => {
-        if (err) throw err;
-        console.log('source.txt was copied to destination.txt');
-    });
+        if (err) throw err
+        console.log('source.txt was copied to destination.txt')
+    })
 }
 
 exports.sortByKey = function sortByKey(x, y) {
     if (x[0] < y[0]) {
-        return -1;
+        return -1
     }
     if (x[0] > y[0]) {
-        return 1;
+        return 1
     }
-    return 0;
+    return 0
 }
 
 

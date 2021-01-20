@@ -1,4 +1,4 @@
-const config = require('config');
+const config = require('config')
 
-const dbConfig = config.get('Customer.dbConfig');
-db.connect(dbConfig, ...);
+const dbConfig = config.get('Customer.dbConfig')
+db.connect(dbConfig, ...)
