@@ -5,7 +5,7 @@ class MySQL {
     constructor() {
         const dbConfig = config.get('dbConfig');
         this.connection = mysql.createConnection(dbConfig);
-        connection.connect();
+        this.connection.connect();
     }
 
     // call example: query("SELECT * FROM table WHERE aaa = :aaa AND bbb = :bbb",{ aaa: aaa, bbb: bbb })
@@ -20,8 +20,8 @@ class MySQL {
         this.connection.end();
     }
 
-    getPrimary() {
-        result = this.query("SHOW KEYS FROM table WHERE Key_name = 'PRIMARY'");
+    getPrimary(table) {
+        let result = this.query("SHOW KEYS FROM " + table + " WHERE Key_name = 'PRIMARY'");
         return result[0].Column_name;
     }
 }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/DaWe35/SkySQL#readme",
   "dependencies": {
-    "config": "^3.3.3"
+    "config": "^3.3.3",
+    "mysql": "^2.18.1"
   }
 }
