@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const config = require('config');
 
-class Database {
+class MySQL {
     constructor() {
         const dbConfig = config.get('dbConfig');
         this.connection = mysql.createConnection(dbConfig);
@@ -25,3 +25,5 @@ class Database {
         return result[0].Column_name;
     }
 }
+
+exports.MySQL = MySQL

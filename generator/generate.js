@@ -1,4 +1,5 @@
 const { initDataFolder, sortByKey, writeData } = require('./utils')
+const { MySQL } = require('./databases/mysql')
 fs = require('fs')
 const config = require('config')
 
@@ -14,13 +15,16 @@ for (let index = 0; index < 1500; index++) {
 const tables = config.get('tables')
 tables.forEach(table => {
 	console.log('Sorting', data.length, 'rows')
-	data.sort(sortByKey)
+	data.sort(sortByKey)	
+	writeData(data, 'ddd')
 
+
+	/* 
 	var indexes = table.indexes
-	tables.forEach(table => {
+	indexes.forEach(index => {
 
 	})
-	writeData(data, 'ddd')
+ 	*/
 
 
 })

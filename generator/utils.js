@@ -10,7 +10,7 @@ touchDir = function touchDir(folder) {
 	}
 }
 
-exports.initDataFolder = function initDataFolder() {
+function initDataFolder() {
     if (touchDir(dir) == false) {
         console.log("The /dist folder already exist, please delete it.")
         process.exit(1)
@@ -27,7 +27,7 @@ exports.initDataFolder = function initDataFolder() {
     })
 }
 
-exports.sortByKey = function sortByKey(x, y) {
+function sortByKey(x, y) {
     if (x[0] < y[0]) {
         return -1
     }
@@ -38,7 +38,7 @@ exports.sortByKey = function sortByKey(x, y) {
 }
 
 
-exports.writeData = function writeData(data, folder) {
+function writeData(data, folder) {
     touchDir(dir + '/' + folder)
 
     // write data to files
@@ -74,3 +74,7 @@ exports.writeData = function writeData(data, folder) {
     console.log('writing index file')
     fs.writeFileSync(dir + '/' + folder + '/index.txt', indexFileContent, noop)
 }
+
+exports.writeData = writeData
+exports.sortByKey = sortByKey
+exports.initDataFolder = initDataFolder
