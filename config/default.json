@@ -12,7 +12,7 @@
 	"tables": [
 		{
 			"name": "test",
-			"columns": [ "id", "username", "tokens" ],
+			"columns": [ "id", "c1", "c2", "c3" ],
 			"indexes": [ "users" ]
 		}
 	]
