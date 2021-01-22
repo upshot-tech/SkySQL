@@ -38,8 +38,10 @@ function sortByKey(x, y) {
 }
 
 
-function writeData(data, folder) {
-    touchDir(dir + '/' + folder)
+function writeData(data, tablename, folder) {
+    touchDir(dir + '/' + tablename)
+    let writefolder = dir + '/' + tablename + '/' + folder
+    touchDir(writefolder)
 
     // write data to files
     console.log('writing', Math.ceil(data.length/1000), 'files')
@@ -57,7 +59,7 @@ function writeData(data, folder) {
             }
             linesInFile += 1
         } else {
-            fs.writeFileSync(dir + '/' + folder + '/' + nextFileName + '.txt', contentToWrite, noop)
+            fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
             linesInFile = 0
             contentToWrite = 'final #\n'
             indexFileContent += firstLineInFile + ' ' + folder + '/' + nextFileName + '.txt\n'
@@ -66,15 +68,37 @@ function writeData(data, folder) {
         }
     }
     if (linesInFile != 0) {
-        fs.writeFileSync(dir + '/' + folder + '/' + nextFileName + '.txt', contentToWrite, noop)
+        fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
         indexFileContent += firstLineInFile + ' ' + folder + '/' + nextFileName + '.txt\n'
     }
 
     // WRITE indexFileContent
     console.log('writing index file')
-    fs.writeFileSync(dir + '/' + folder + '/index.txt', indexFileContent, noop)
+    fs.writeFileSync(writefolder + '/index.txt', indexFileContent, noop)
 }
 
+function stringifyData(rawData, primaryIndex) {
+    data = []
+    rawData.forEach(row => {
+        let tempRow = {...row}
+        delete tempRow[primaryIndex]
+        jsonRow = JSON.stringify(tempRow)
+        data.push([ row[primaryIndex], jsonRow ])
+    });
+    return data
+}
+
+function stringifyIndex(rawData, primaryIndex, indexBy) {
+    data = []
+    rawData.forEach(row => {
+        // jsonRow = JSON.stringify(tempRow)
+        data.push([ row[indexBy], row[primaryIndex] ])
+    });
+    return data
+}
+
+exports.stringifyIndex = stringifyIndex
+exports.stringifyData = stringifyData
 exports.writeData = writeData
 exports.sortByKey = sortByKey
 exports.initDataFolder = initDataFolder

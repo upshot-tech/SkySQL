@@ -5,15 +5,15 @@
 		"host": "127.0.0.1",
 		"user": "root",
 		"password": "",
-		"database": ""
+		"database": "skysql"
 	},
 	// Enter tables and columns you want to export.
 	// Please specify indexes for columns you want to ORDER BY later.
 	"tables": [
 		{
-			"name": "test",
+			"name": "skysql",
 			"columns": [ "id", "c1", "c2", "c3" ],
-			"indexes": [ "users" ]
+			"indexes": [ "c1", "c2" ]
 		}
 	]
 }
