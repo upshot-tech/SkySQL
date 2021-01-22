@@ -9,10 +9,10 @@ class MySQL {
     }
 
     // call example: query("SELECT * FROM table WHERE aaa = :aaa AND bbb = :bbb",{ aaa: aaa, bbb: bbb })
-    query(query, params = []) {
+    query(query, callback, params = []) {
         this.connection.query(query, params, function(error, results, fields){
             if (error) throw error;
-            return results;
+            callback(results)
         });
     }
 
@@ -20,10 +20,12 @@ class MySQL {
         this.connection.end();
     }
 
-    getPrimary(table) {
-        let result = this.query("SHOW KEYS FROM " + table + " WHERE Key_name = 'PRIMARY'");
-        return result[0].Column_name;
+    getPrimary(table, callback) {
+        this.query("SHOW KEYS FROM " + table + " WHERE Key_name = 'PRIMARY'", function (result) {
+            callback(result[0].Column_name)
+        });
     }
 }
+
 
 exports.MySQL = MySQL
