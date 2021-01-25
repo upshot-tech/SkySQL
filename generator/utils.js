@@ -80,10 +80,19 @@ function writeData(data, tablename, folder) {
 function stringifyData(rawData, primaryIndex) {
     data = []
     rawData.forEach(row => {
+        
+        // escape key strings if needed
+        var rawKey = row[primaryIndex]
+        if (typeof rawKey == 'string' && (rawKey.includes(' ') || rawKey.startsWith('"'))) {
+            var escapedKey = escapeQuotes(rawKey)
+        } else {
+            var escapedKey = rawKey
+        }
+
         let tempRow = {...row}
         delete tempRow[primaryIndex]
         jsonRow = JSON.stringify(tempRow)
-        data.push([ row[primaryIndex], jsonRow ])
+        data.push([ escapedKey, jsonRow ])
     });
     return data
 }
@@ -91,10 +100,27 @@ function stringifyData(rawData, primaryIndex) {
 function stringifyIndex(rawData, primaryIndex, indexBy) {
     data = []
     rawData.forEach(row => {
-        // jsonRow = JSON.stringify(tempRow)
-        data.push([ row[indexBy], row[primaryIndex] ])
+        let rawKey = row[indexBy]
+        console.log(typeof rawKey == 'string' && rawKey.startsWith('"'))
+        if (typeof rawKey == 'string' && (rawKey.includes(' ') || rawKey.startsWith('"'))) {
+            var escapedKey = escapeQuotes(rawKey)
+        } else {
+            var escapedKey = rawKey
+        }
+        data.push([escapedKey, row[primaryIndex] ])
     });
     return data
+}
+
+
+function escapeQuotes(string) {
+    return '"' + string.replace(/"/g, '\\"') + '"';
+}
+function unescapeQuotes(string) {
+    if (string.startsWith('"') && string.endsWith('"')) {
+        string = string.slice(1,-1);
+    }
+    return string.replace(/\\"/g, '"');
 }
 
 exports.stringifyIndex = stringifyIndex
