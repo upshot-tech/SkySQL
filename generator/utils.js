@@ -45,9 +45,13 @@ function writeData(data, tablename, folder) {
 
     // write data to files
     console.log('writing', Math.ceil(data.length/1000), 'files')
+    if (folder == 'data') {
+        var contentToWrite = 'table #\n'
+    } else {
+        var contentToWrite = 'column_index #\n'
+    }
     var indexFileContent = 'index #\n'
     var linesInFile = 0
-    var contentToWrite = 'final #\n'
     var nextFileName = 0
     var firstLineInFile = ''
 
@@ -61,7 +65,11 @@ function writeData(data, tablename, folder) {
         } else {
             fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
             linesInFile = 0
-            contentToWrite = 'final #\n'
+            if (folder == 'data') {
+                contentToWrite = 'table #\n'
+            } else {
+                contentToWrite = 'column_index #\n'
+            }
             indexFileContent += firstLineInFile + ' ' + folder + '/' + nextFileName + '.txt\n'
             firstLineInFile = ''
             nextFileName += 1
