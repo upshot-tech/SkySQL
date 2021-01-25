@@ -1,10 +1,10 @@
 <script src="lookup.js"></script>
 <script>
-	let skylookup = new SkyLookUp('data/index.txt');
+	let skylookup = new SkyLookUp('skysql');
 	function search() {
 		let str = document.getElementById('input_str').value
 		changePrint()
-		skylookup.lookup(str, searchCallback)
+		skylookup.lookup(str, 'c1', searchCallback)
 	}
 
 	function searchCallback(err, result) {

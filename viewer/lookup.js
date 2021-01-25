@@ -3,7 +3,7 @@ class SkyLookUp {
 		this.root = root;
 	}
 
-	lookup(searchText, callback) {
+	lookup(searchText, index, callback) {
 	
 		function ajaxGet(url) {
 			var xhttp = new XMLHttpRequest()
@@ -24,12 +24,13 @@ class SkyLookUp {
 		function getLines(text) {
 			return text.split('\n');
 		}
-
+		
+		var self = this
 		function parseData(response) {
 			let lines = getLines(response)
 			let firstLine = lines[0]
 			let splittedFirstLine = firstLine.split(/ (.*)/)	// split string by first space
-			if (splittedFirstLine[0] == 'index') {
+			if (splittedFirstLine[0] == 'index' || splittedFirstLine[0] == 'column_index') {
 				let lastWord = null
 				let found = null
 				for (var i = 0; i < lines.length; i++){
@@ -46,12 +47,17 @@ class SkyLookUp {
 					if (found == null) {
 						lastWord = words[1]
 					} else {
-						console.log('preindex found:', found)
-						ajaxGet(found)
+						console.log('preindex found:', self.root + '/' + found)
+						if (splittedFirstLine[0] == 'column_index') {
+							searchText = found
+							ajaxGet(self.root + '/data/index.txt')
+						} else {
+							ajaxGet(self.root + '/' + found)
+						}
 						break;
 					}
 				}
-			} else if (splittedFirstLine[0] == 'final') {
+			} else if (splittedFirstLine[0] == 'table') {
 				for (var i = 0; i < lines.length; i++){
 					if (lines[i].startsWith(searchText + ' ')) {
 						let words = lines[i].split(/ (.*)/)
@@ -71,7 +77,7 @@ class SkyLookUp {
 		}
 
 		// start search
-		ajaxGet(this.root)		
+		ajaxGet(this.root + '/' + index + "/index.txt")
 	}
 }
 
