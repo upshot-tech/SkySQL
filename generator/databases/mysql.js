@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const config = require('config');
 
-class MySQL {
+class DB {
     constructor() {
         const dbConfig = config.get('dbConfig');
         this.connection = mysql.createConnection(dbConfig);
@@ -28,4 +28,4 @@ class MySQL {
 }
 
 
-exports.MySQL = MySQL
+exports.DB = DB

@@ -1,9 +1,10 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex } = require('./utils')
-const { MySQL } = require('./databases/mysql')
+// const { DB } = require('./databases/mysql')
+const { DB } = require('./databases/postgres')
 fs = require('fs')
 const config = require('config')
 const { exit } = require('process')
-const mysql = new MySQL
+const db = new DB
 
 initDataFolder()
 
@@ -11,11 +12,11 @@ initDataFolder()
 const tables = config.get('tables')
 tables.forEach(table => {
 	console.log(table.name)
-	mysql.getPrimary(table.name, function(primaryIndex) {
+	db.getPrimary(table.name, function(primaryIndex) {
 		console.log('primaryIndex:', primaryIndex)
 		
 		let cols = table.columns.join()
-		mysql.query('SELECT ' + cols + ' FROM ' + table.name + ' WHERE 1 LIMIT 10', function(rawData) {
+		db.query('SELECT ' + cols + ' FROM ' + table.name + ' WHERE 1 LIMIT 10', function(rawData) {
 
 			data = stringifyData(rawData, primaryIndex)
 			console.log('Sorting', data.length, 'rows')
