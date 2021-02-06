@@ -109,7 +109,7 @@ function stringifyIndex(rawData, primaryIndex, indexBy) {
     data = []
     rawData.forEach(row => {
         let rawKey = row[indexBy]
-        console.log(typeof rawKey == 'string' && rawKey.startsWith('"'))
+        console.log("typeof rawKey == 'string' && rawKey.startsWith('\"'): " + typeof rawKey == 'string' && rawKey.startsWith('"'))
         if (typeof rawKey == 'string' && (rawKey.includes(' ') || rawKey.startsWith('"'))) {
             var escapedKey = escapeQuotes(rawKey)
         } else {

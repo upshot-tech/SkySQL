@@ -8,6 +8,7 @@ class DB {
         this.connection.connect()
         this.connection.query('SELECT NOW()', (err, result) => {
             if (err !== null) {
+                console.log('SQL connection error:')
                 console.log(err)
             }
         })
@@ -16,8 +17,9 @@ class DB {
     // call example: query("SELECT * FROM table WHERE aaa = :aaa AND bbb = :bbb",{ aaa: aaa, bbb: bbb })
     query(query, callback, params = []) {
         this.connection.query(query, params, (err, result) => {
-            console.log(err ? err.stack : result.rows[0].message) // Hello World!
-            callback(result)
+            // console.log('SQL result:')
+            // console.log(err ? err.stack : result.rows[0]) // Hello World!
+            callback(result.rows)
         })
     }
 
@@ -39,9 +41,7 @@ class DB {
                 kcu.table_name,
                 position;`,
             function (result) {
-                console.log("result________")
-                console.log(result)
-                callback(result.rows[0].key_column)
+                callback(result[0].key_column)
             }
         )
     }

@@ -1,28 +1,32 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex } = require('./utils')
-// const { DB } = require('./databases/mysql')
-const { DB } = require('./databases/postgres')
+
 fs = require('fs')
 const config = require('config')
-const { exit } = require('process')
+
+const dbType = config.get('dbConfig.type')
+const { DB } = require('./databases/' + dbType)
 const db = new DB
+
+
+fs.rmdirSync(__dirname + '/../dist', { recursive: true });
 
 initDataFolder()
 
 
 const tables = config.get('tables')
 tables.forEach(table => {
-	console.log(table.name)
+	console.log("table.name: " + table.name)
 	db.getPrimary(table.name, function(primaryIndex) {
 		console.log('primaryIndex:', primaryIndex)
 		
 		let cols = table.columns.join()
-		db.query('SELECT ' + cols + ' FROM ' + table.name + ' WHERE 1 LIMIT 10', function(rawData) {
+		db.query('SELECT ' + cols + ' FROM ' + table.name, function(rawData) {
 
 			data = stringifyData(rawData, primaryIndex)
 			console.log('Sorting', data.length, 'rows')
 			data.sort(sortByKey)
 			writeData(data, table.name, 'data')
-		
+
 			var indexes = table.indexes
 			indexes.forEach(index => {
 				data = stringifyIndex(rawData, primaryIndex, index)
