@@ -25,6 +25,18 @@ class DB {
             callback(result[0].Column_name)
         });
     }
+
+    getAllTables(database, callback) {
+        this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", function (result) {
+            callback(result)
+        }, database);
+    }
+
+    getAllColumns(table, callback) {
+        this.query("show columns from " + table, function (result) {
+            callback(result)
+        }, table);
+    }
 }
 
 
