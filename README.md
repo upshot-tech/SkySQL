@@ -33,12 +33,12 @@ You can create a searchable dictionary or a decentralized Twitter where users ca
 
 - Install NodeJS
 
-- Copy `config/default.json` to `config/YOURFILE`
+- Copy `config/default.json` to `config/YOURFILE.json` (you can have multiple files for multiple databases)
 
 - set your env:
 
 Windows:
-`set NODE_ENV=YOURFILE`
+`set NODE_ENV=YOURFILE.json`
 
 Linux:
-`export NODE_ENV=YOURFILE`
+`export NODE_ENV=YOURFILE.json`
