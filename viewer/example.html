@@ -3,8 +3,10 @@
 	let skylookup = new SkyLookUp('skysql');
 	function search() {
 		let str = document.getElementById('input_str').value
+		
 		changePrint()
 		skylookup.lookup(str, 'c1', searchCallback)
+		console.log("SELECT * FROM "+document.getElementById('FROM').innerText+" WHERE "+document.getElementById('WHERE').innerText+"=\'"+str+"\'");
 	}
 
 	function searchCallback(err, result) {
@@ -35,9 +37,9 @@
 		text-align: center;
 		font-size: 120%;
 	}
-	input, button {
-		padding: 20px 40px;
-		font-size: 20px;
+	select, input, button {
+		padding: 13px 40px;
+		font-size: 12px;
 		background: #25272a;
 		color: #FFF;
 		border: none;
@@ -67,7 +69,18 @@
 <div class="schbox">
 	<p id="print">Please input any 1-4 length word (can contain lower/uppercase letters and numbers), for example "Sia", "SkyDB", "6453", or "hold"<br>
 		SkyLookup will find it in the 13 million word database!</p>
-
+	<label>SELECT * FROM</label>
+	<select id="FROM">
+		<option value="table1">table1</option>
+		<option value="table2">table2</option>
+	</select>
+	<label>WHERE</label>
+	<select id="WHERE">
+		<option value="id">id</option>
+		<option value="value">value</option>
+	</select>
+	<label>=</label>
+	
 	<input id="input_str" placeholder="Type 4 letters or numbers"><button onclick="search()">Search!</button>
 </div>
 
