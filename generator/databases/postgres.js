@@ -10,6 +10,7 @@ class DB {
             if (err !== null) {
                 console.log('SQL connection error:')
                 console.log(err)
+	
             }
         })
     }
@@ -19,7 +20,7 @@ class DB {
         this.connection.query(query, params, (err, result) => {
             // console.log('SQL result:')
             // console.log(err ? err.stack : result.rows[0]) // Hello World!
-            callback(result.rows)
+            callback(result);
         })
     }
 
@@ -44,6 +45,24 @@ class DB {
                 callback(result[0].key_column)
             }
         )
+    }
+	// returns all tables from a database as an array ['table1', 'table2']
+    getAllTables(database, callback) {
+        this.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'", function (result) {		
+            var tables = [];
+			for(var i=0;i<result.length;i++){
+				tables.push(result[i].table_name);
+			}
+            callback(tables);
+        }, database);
+    }
+
+    // returns all columns from a table as an array ['column1', 'column2']
+    getAllColumns(table, callback) {
+			this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name =" +table, function (result) {
+
+            callback(result);
+        }, table);
     }
 }
 
