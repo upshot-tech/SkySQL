@@ -27,10 +27,18 @@ You can create a searchable dictionary or a decentralized Twitter where users ca
 
 ![Tree index](https://www.researchgate.net/profile/Philippe_Fournier_Viger/publication/263696690/figure/fig1/AS:296556428316691@1447715970966/A-Prediction-Tree-PT-Inverted-Index-II-and-Lookup-Table-LT.png)
 
-# run
+# SETUP
+
+- Install PostgreSQL or MySQL and import SQL dumps from `SETUP` folder.
+
+- Install NodeJS
+
+- Copy `config/default.json` to `config/YOURFILE`
+
+- set your env:
 
 Windows:
-`set NODE_ENV=production`
+`set NODE_ENV=YOURFILE`
 
 Linux:
-`export NODE_ENV=production`
+`export NODE_ENV=YOURFILE`
