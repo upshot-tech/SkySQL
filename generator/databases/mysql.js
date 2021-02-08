@@ -30,9 +30,9 @@ class DB {
     // returns all tables from a database as an array ['table1', 'table2']
     getAllTables(database, callback) {
         this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", function (result) {
-           var tables = [];
-			for(var i=0;i<result.length;i++){
-				tables.push(result[i].table_name);
+            var tables = [];
+			for(var i=0; i < result.length; i++){
+				tables.push(result[i].TABLE_NAME);
 			}
             callback(tables);
         }, database);
