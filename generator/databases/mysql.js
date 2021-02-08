@@ -30,14 +30,22 @@ class DB {
     // returns all tables from a database as an array ['table1', 'table2']
     getAllTables(database, callback) {
         this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", function (result) {
-            callback(result)
+           var tables = [];
+			for(var i=0;i<result.length;i++){
+				tables.push(result[i].table_name);
+			}
+            callback(tables);
         }, database);
     }
 
     // returns all columns from a table as an array ['column1', 'column2']
     getAllColumns(table, callback) {
-        this.query("show columns from " + table, function (result) {
-            callback(result)
+			this.query("show columns from " + table, function (result) {
+			var columns = [];
+			for(var i=0;i<result.length;i++){
+				columns.push(result[i].Field);
+			}
+            callback(columns);
         }, table);
     }
 }
