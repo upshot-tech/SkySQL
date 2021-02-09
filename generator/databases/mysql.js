@@ -22,8 +22,11 @@ class DB {
 
     // returns the name of the primary column from a given table
     getPrimary(table, callback) {
-        this.query("SHOW KEYS FROM " + table + " WHERE Key_name = 'PRIMARY'", function (result) {
-            callback(result[0].Column_name)
+        this.query("SHOW KEYS FROM " + table + " WHERE Key_name = 'PRIMARY'", function (result) {			
+			if (result.length==0) {
+				throw "No Primary key found!";
+			}
+			callback(result[0].Column_name)
         });
     }
 
@@ -32,7 +35,7 @@ class DB {
         this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", function (result) {
             var tables = [];
 			for(var i=0; i < result.length; i++){
-				tables.push(result[i].TABLE_NAME);
+				tables.push(result[i].table_name);
 			}
             callback(tables);
         }, database);
@@ -48,6 +51,14 @@ class DB {
             callback(columns);
         }, table);
     }
+	getAllIndex(table, callback) {
+		this.query(`select table_name, non_unique, group_concat(column_name order by seq_in_index) as index_columns 
+					from information_schema.statistics where table_schema not in ('information_schema', 'mysql', 'performance_schema', 'sys') 
+					AND TABLE_NAME=` + table + `GROUP BY table_name,non_unique")`, 
+			function (result) {
+				callback(result.index_columns);
+			})
+	}
 }
 
 

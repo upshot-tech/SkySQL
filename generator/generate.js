@@ -13,7 +13,13 @@ fs.rmdirSync(__dirname + '/../dist', { recursive: true });
 initDataFolder()
 
 
-const tables = config.get('tables')
+const tablesRaw = config.get('tables')
+if(tablesRaw == '*') {
+	const tables = db.getAllTables()
+} else {
+	const tables = config.get('tables', callback)
+}
+
 tables.forEach(table => {
 	console.log("table.name: " + table.name)
 	db.getPrimary(table.name, function(primaryIndex) {

@@ -41,6 +41,9 @@ class DB {
                 kcu.table_name,
                 position;`,
             function (result) {
+				if (result.length==0) {
+					throw "No Primary key found!";
+				}
                 callback(result[0].key_column)
             }
         )
