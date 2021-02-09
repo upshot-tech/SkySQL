@@ -31,7 +31,8 @@ class DB {
     }
 
     // returns all tables from a database as an array ['table1', 'table2']
-    getAllTables(database, callback) {
+    getAllTables(callback) {
+        let database = config.get('dbConfig.database')
         this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", function (result) {
             var tables = [];
 			for(var i=0; i < result.length; i++){
@@ -42,19 +43,19 @@ class DB {
     }
 
     // returns all columns from a table as an array ['column1', 'column2']
-    getAllColumns(table, callback) {
-			this.query("show columns from " + table, function (result) {
+    getAllColumns(tableName, callback) {
+        this.query("show columns from " + tableName, function (result) {
 			var columns = [];
-			for(var i=0;i<result.length;i++){
+			for (var i=0; i < result.length; i++) {
 				columns.push(result[i].Field);
 			}
             callback(columns);
-        }, table);
+        });
     }
-	getAllIndex(table, callback) {
+	getAllIndex(tableName, callback) {
 		this.query(`select table_name, non_unique, group_concat(column_name order by seq_in_index) as index_columns 
 					from information_schema.statistics where table_schema not in ('information_schema', 'mysql', 'performance_schema', 'sys') 
-					AND TABLE_NAME=` + table + `GROUP BY table_name,non_unique")`, 
+					AND TABLE_NAME=` + tableName + `GROUP BY table_name,non_unique")`, 
 			function (result) {
 				callback(result.index_columns);
 			})

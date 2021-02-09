@@ -19,7 +19,12 @@ class DB {
         this.connection.query(query, params, (err, result) => {
             // console.log('SQL result:')
             // console.log(err ? err.stack : result.rows[0]) // Hello World!
-            callback(result.rows);
+            try {
+                callback(result.rows)
+            } catch (error) {
+                console.log(error)
+                console.log('Query:', query)
+            }
         })
     }
 
@@ -49,10 +54,10 @@ class DB {
         )
     }
 	// returns all tables from a database as an array ['table1', 'table2']
-    getAllTables(database, callback) {
+    getAllTables(callback) {
         this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'", function (result) {
             var tables = [];
-			for(var i=0; i < result.length; i++){
+			for (var i=0; i < result.length; i++) {
 				tables.push(result[i].table_name);
 			}
             callback(tables);
@@ -60,12 +65,14 @@ class DB {
     }
 
     // returns all columns from a table as an array ['column1', 'column2']
-    getAllColumns(table, callback) {
-        this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + table + "'", function (result) {
+    getAllColumns(tableName, callback) {
+        this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'", function (result) {
             var cols = [];
-			for(var i=0; i < result.length; i++){
-				cols.push(result[i].column_name);
+			for (var i=0; i < result.length; i++) {
+                let colName = result[i].column_name
+                cols.push(colName)
 			}
+            
             callback(cols);
         });
     }

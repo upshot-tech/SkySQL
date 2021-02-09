@@ -1,5 +1,6 @@
 const dir = __dirname + '/../dist'
 const noop = () => {}
+const config = require('config')
 
 touchDir = function touchDir(folder) {
 	if (!fs.existsSync(folder)){
@@ -109,7 +110,6 @@ function stringifyIndex(rawData, primaryIndex, indexBy) {
     data = []
     rawData.forEach(row => {
         let rawKey = row[indexBy]
-        console.log("typeof rawKey == 'string' && rawKey.startsWith('\"'): " + typeof rawKey == 'string' && rawKey.startsWith('"'))
         if (typeof rawKey == 'string' && (rawKey.includes(' ') || rawKey.startsWith('"'))) {
             var escapedKey = escapeQuotes(rawKey)
         } else {
@@ -131,8 +131,64 @@ function unescapeQuotes(string) {
     return string.replace(/\\"/g, '"');
 }
 
+
+function getTablesToExport(db, callback) {
+    const tablesRaw = config.get('tables')
+    if (tablesRaw[0].name == '*') {
+        throw 'Given "*" for tables is not expected';
+        db.getAllTables(callback)
+    } else {
+        const tables = config.get('tables')
+        callback(tables)
+    }
+}
+
+function getColsToExport(db, table, callback) {
+    if (table.columns == '*') {
+        db.getAllColumns(table.name, function(cols) {
+            let colStr = joinToString(cols)
+            callback(colStr)
+        })
+    } else {
+        let colStr = joinToString(table.columns)
+        callback(colStr)
+    }
+}
+
+function getIndexesToExport(db, table, callback) {
+    if (table.indexes == '*') {
+        db.getAllColumns(table.name, callback)
+    } else {
+        callback(table.indexes)
+    }
+}
+
+function joinToString(array) {
+    var str = ''
+    array.forEach(elem => {
+        // join cols to string
+        if (str != '') {
+            str += ', '
+        }
+        str += '"' + elem + '"'
+    })
+    return str
+}
+
+function initTableName(tableName) {
+    if (tableName == tableName.toLowerCase()) {
+        return tableName
+    } else {
+        return '"' + tableName + '"'
+    }
+}
+
 exports.stringifyIndex = stringifyIndex
 exports.stringifyData = stringifyData
 exports.writeData = writeData
 exports.sortByKey = sortByKey
 exports.initDataFolder = initDataFolder
+exports.getTablesToExport = getTablesToExport
+exports.getColsToExport = getColsToExport
+exports.getIndexesToExport = getIndexesToExport
+exports.initTableName = initTableName
