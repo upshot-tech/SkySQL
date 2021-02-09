@@ -11,9 +11,14 @@
 	// Please specify indexes for columns you want to ORDER BY later.
 	"tables": [
 		{
-			"name": "skysql",
+			"name": "example_table_1",
 			"columns": [ "id", "c1", "c2", "c3" ],
 			"indexes": [ "c1", "c2" ]
+		},
+		{
+			"name": "example_table_2",
+			"columns": "*",
+			"indexes": "*"
 		}
 	]
 }
