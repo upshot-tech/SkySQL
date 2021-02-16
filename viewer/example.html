@@ -1,15 +1,17 @@
 <script src="lookup.js"></script>
 <script>
-	let skylookup = new SkyLookUp('http://sql.local');
+	let skysql = new SkySQL('http://sql.local');
 	function search() {
 		let str = document.getElementById('input_str').value
 		let tableName = document.getElementById('FROM').value
 		let colName = document.getElementById('WHERE').value
 		changePrint()
-		skylookup.lookup(str, tableName, colName, searchCallback)
-		console.log("SELECT * FROM "+ tableName + " WHERE " + colName + "=\'" + str + "\'");
+
+		// Perform SkySQL lookup
+		skysql.lookup(str, tableName, colName, searchCallback)
 	}
 
+	// SkySQL will call back this function
 	function searchCallback(err, result) {
 		if(err) {
 			changePrint(err)
@@ -80,13 +82,13 @@
 	</select>
 	<label>WHERE</label>
 	<select id="WHERE">
-		<option value="id">id</option>
+		<option value="id" selected>id</option>
 		<option value="address">address</option>
 		<option value="txHash">txHash</option>
 	</select>
 	<label>=</label>
 	
-	<input id="input_str" placeholder="Type 4 letters or numbers"><button onclick="search()">Search!</button>
+	<input id="input_str" placeholder="Type 4 letters or numbers" value="1"><button onclick="search()">Search!</button>
 </div>
 
 <p>Hey, the <a href="data/index.txt">index files</a> are human readable ;)</p>

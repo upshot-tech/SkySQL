@@ -15,7 +15,7 @@ fs.rmdirSync(__dirname + '/../dist', { recursive: true });
 initDataFolder()
 
 
-/* I hate this callback hell, but mysql is not compatible with async/await. Took 2 hours to realize. */
+// I hate this callback hell, but class functions + mysql are not compatible with async/await. Took 2 hours to realize.
 
 getTablesToExport(db, function(tables) {
 	// iterate on all tables
