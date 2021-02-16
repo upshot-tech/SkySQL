@@ -30,10 +30,10 @@ class SkySQL {
 		var self = this
 		function parseData(response) {
 			let lines = getLines(response)
-			let firstLineSplit = splitLine(lines[0])
+			let dataFileType = splitLine(lines[0])[0]
 
 			// if .txt file is an index (top-level index or column_index)
-			if (firstLineSplit[0] == 'index' || firstLineSplit[0] == 'column_index') {
+			if (dataFileType == 'index' || dataFileType == 'column_index') {
 				let lastWord = null
 				let found = null
 				for (var i = 0; i < lines.length; i++){
@@ -51,8 +51,9 @@ class SkySQL {
 						lastWord = words[1]
 					} else {
 						console.log('preindex found:', self.root + '/' + table + '/' + found)
-						if (firstLineSplit[0] == 'column_index') {
+						if (dataFileType == 'column_index') {
 							searchText = found
+							// set equalty type to '='
 							ajaxGet(self.root + '/' + table + '/data/index.txt')
 						} else {
 							ajaxGet(self.root + '/' + table + '/' + found)
@@ -61,7 +62,7 @@ class SkySQL {
 					}
 				}
 			// if file is a table (data folder)
-			} else if (firstLineSplit[0] == 'table') {
+			} else if (dataFileType == 'table') {
 				searchInTable(lines)
 			} else {
 				console.log('ERROR: invaid index file')
