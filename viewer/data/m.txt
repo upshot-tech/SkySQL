@@ -1,4 +1,0 @@
-final # notes after the first space
-moon moon_link
-sia sia_link
-skynet skynet_link

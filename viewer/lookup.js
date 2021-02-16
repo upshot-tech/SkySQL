@@ -3,7 +3,7 @@ class SkyLookUp {
 		this.root = root;
 	}
 
-	lookup(searchText, index, callback) {
+	lookup(searchText, table, index, callback) {
 	
 		function ajaxGet(url) {
 			var xhttp = new XMLHttpRequest()
@@ -47,12 +47,12 @@ class SkyLookUp {
 					if (found == null) {
 						lastWord = words[1]
 					} else {
-						console.log('preindex found:', self.root + '/' + found)
+						console.log('preindex found:', self.root + '/' + table + '/' + found)
 						if (splittedFirstLine[0] == 'column_index') {
 							searchText = found
-							ajaxGet(self.root + '/data/index.txt')
+							ajaxGet(self.root + '/' + table + '/data/index.txt')
 						} else {
-							ajaxGet(self.root + '/' + found)
+							ajaxGet(self.root + '/' + table + '/' + found)
 						}
 						break;
 					}
@@ -77,7 +77,7 @@ class SkyLookUp {
 		}
 
 		// start search
-		ajaxGet(this.root + '/' + index + "/index.txt")
+		ajaxGet(this.root + '/' + table + '/' + index + "/index.txt")
 	}
 }
 

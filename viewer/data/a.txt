@@ -1,3 +1,0 @@
-index # notes after the first space
-aa data/a/aa.txt
-ab data/a/ab.txt

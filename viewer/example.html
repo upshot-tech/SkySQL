@@ -1,12 +1,13 @@
 <script src="lookup.js"></script>
 <script>
-	let skylookup = new SkyLookUp('skysql');
+	let skylookup = new SkyLookUp('http://sql.local');
 	function search() {
 		let str = document.getElementById('input_str').value
-		
+		let tableName = document.getElementById('FROM').value
+		let colName = document.getElementById('WHERE').value
 		changePrint()
-		skylookup.lookup(str, 'c1', searchCallback)
-		console.log("SELECT * FROM "+document.getElementById('FROM').innerText+" WHERE "+document.getElementById('WHERE').innerText+"=\'"+str+"\'");
+		skylookup.lookup(str, tableName, colName, searchCallback)
+		console.log("SELECT * FROM "+ tableName + " WHERE " + colName + "=\'" + str + "\'");
 	}
 
 	function searchCallback(err, result) {
@@ -70,13 +71,18 @@
 	<p id="print">sooooooon</p>
 	<label>SELECT * FROM</label>
 	<select id="FROM">
-		<option value="table1">table1</option>
-		<option value="table2">table2</option>
+		<option value="asset_events" selected>asset_events</option>
+		<option value="assetGroups" disabled>assetGroups</option>
+		<option value="assets" disabled>assets</option>
+		<option value="comparisons" disabled>comparisons</option>
+		<option value="groups" disabled>groups</option>
+		<option value="messages" disabled>messages</option>
 	</select>
 	<label>WHERE</label>
 	<select id="WHERE">
 		<option value="id">id</option>
-		<option value="value">value</option>
+		<option value="address">address</option>
+		<option value="txHash">txHash</option>
 	</select>
 	<label>=</label>
 	
