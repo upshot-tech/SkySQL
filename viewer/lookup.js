@@ -1,12 +1,12 @@
 class SkySQL {
-	constructor(root) {
-		this.root = root;
+	constructor() {
+		/* this.root = root; */
 	}
 
 	lookup(searchText, table, index, callback) {
 
 		// start search
-		ajaxGet(this.root + '/' + table + '/' + index + "/index.txt")
+		ajaxGet(table + '/' + index + "/index.txt")
 
 
 		// Perform ajax request recursively
@@ -50,13 +50,13 @@ class SkySQL {
 					if (found == null) {
 						lastWord = words[1]
 					} else {
-						console.log('preindex found:', self.root + '/' + table + '/' + found)
+						console.log('preindex found:', table + '/' + found)
 						if (dataFileType == 'column_index') {
 							searchText = found
 							// set equalty type to '='
-							ajaxGet(self.root + '/' + table + '/data/index.txt')
+							ajaxGet(table + '/data/index.txt')
 						} else {
-							ajaxGet(self.root + '/' + table + '/' + found)
+							ajaxGet(table + '/' + found)
 						}
 						break;
 					}
