@@ -1,6 +1,5 @@
 <script src="lookup.js"></script>
 <script>
-	let skysql = new SkySQL()
 	function search() {
 		let str = document.getElementById('input_str').value
 		let tableName = document.getElementById('FROM').value
@@ -8,7 +7,7 @@
 		changePrint()
 
 		// Perform SkySQL lookup
-		skysql.lookup(str, tableName, colName, searchCallback)
+		SkySQL.lookup(str, tableName, colName, searchCallback)
 	}
 
 	// SkySQL will call back this function
