@@ -71,14 +71,14 @@ function writeData(data, tablename, folder) {
             } else {
                 contentToWrite = 'column_index #\n'
             }
-            indexFileContent += firstLineInFile + ' ' + folder + '/' + nextFileName + '.txt\n'
+            indexFileContent += firstLineInFile + ' ' + nextFileName + '.txt\n'
             firstLineInFile = ''
             nextFileName += 1
         }
     }
     if (linesInFile != 0) {
         fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
-        indexFileContent += firstLineInFile + ' ' + folder + '/' + nextFileName + '.txt\n'
+        indexFileContent += firstLineInFile + ' ' + nextFileName + '.txt\n'
     }
 
     // WRITE indexFileContent
