@@ -4,64 +4,87 @@ var SkySQL = (function() {
 		async lookup(searchText, table, index, callback) {
 			// start search
 
-			indexes = getIndexes()
+			let preIndexes = await getPreIndexes(index, [searchText])
+			// console.log('preIndexes', preIndexes)
+			let indexes = await getData(index, preIndexes[0], searchText)
+			// console.log('indexes', indexes)
+			let dataIndexes = await getIndex(indexes)
+			// console.log('dataIndexes', dataIndexes)
+			let data = await getData('data', dataIndexes, indexes[0])
+			// console.log("data:", data)
+
+			callback(null, data)
 
 			async function ajaxGet(url) {
 				let response = await fetch(url)
 				response = await response.text()
 				return response
 			}
-			
-			async function getIndexes() {
-				let response = await ajaxGet(table + '/' + index + "/index.txt")
-				let lines = getLines(response)
-				let dataFileType = splitLine(lines[0])[0]
 
+			async function readFile(url) {
+				let response = await ajaxGet(url)
+				let lines = splitLines(response)
+				let dataFileType = splitOneLine(lines[0])[0]
+				return { 'lines': lines, 'dataFileType': dataFileType }
 			}
 
-			function parseData(response) {
+			async function getPreIndexes(column, searchArr) {
+				let file = await readFile(table + '/' + column + "/index.txt")
+				let equality = findEquality(file, '<=', searchArr)
+				return [equality[0]]
+			}
 
-				// if .txt file is an index (top-level index or column_index)
-				if (dataFileType == 'index' || dataFileType == 'column_index') {
-					let lastWord = null
-					let found = null
-					for (var i = 0; i < lines.length; i++){
-						if (typeof lines[i+1] == 'undefined') {
-							found = lines[i].split(/ (.*)/)[1]
-						} else {
-							var words = lines[i+1].split(/ (.*)/)
-							if (words[0] > searchText || lines[i+1] == '\n' || lines[i+1] == '') {
-								found = lastWord
-								console.log('found', found)
-							}
-						}
+			async function getIndex(preIndexes) {
+				let file = await readFile(table + '/data/index.txt')
+				let equality = findEquality(file, '<=', preIndexes)
+				return [equality[0]]
+			}
 
-						if (found == null) {
-							lastWord = words[1]
-						} else {
-							console.log('preindex found:', table + '/' + found)
-							if (dataFileType == 'column_index') {
-								searchText = found
-								// set equalty type to '='
-								ajaxGet(table + '/data/index.txt')
-							} else {
-								ajaxGet(table + '/' + found)
-							}
-							break;
-						}
-					}
-				// if file is a table (data folder)
-				} else if (dataFileType == 'table') {
-					searchInTable(lines)
-				} else {
-					console.log('ERROR: invaid index file')
+			async function getData(column, filename, searchFor) {
+				let file = await readFile(table + '/' + column + '/' + filename)
+				return findEquality(file, '==', [searchFor])
+			}
+
+			function findEquality(file, type, requirements) {
+				if (type !== '==' && type !== '<=') {
+					throw 'Equality type ' + type + ' is not implemented'
 				}
+				let found = []
+				for (var i = 1; i < file.lines.length; i++) {
+					if (typeof file.lines[i] == 'undefined' || file.lines[i] == '') { // end of lines
+						break
+					} else {
+						var words = splitOneLine(file.lines[i])
+						requirements.forEach(requirement => {
+							if (type == '==') {
+								if (words[0] == requirement) {
+									found.push(words[1])
+								}
+							} else if (type == '<=') {
+								if (words[0] <= requirement) {
+									found.push(words[1])
+								}
+							}
+						})
+					}
+				}
+				// console.log('Equality found:', found)
+				return found
 			}
 
-			function searchInTable(lines) {
+			function splitLines(text) {
+				return text.split('\n')
+			}
+
+			function splitOneLine(line) {
+				return line.split(/ (.*)/)
+			}
+
+
+			/* function searchInTable(lines) {
 				for (var i = 0; i < lines.length; i++){
 					if (lines[i].startsWith(searchText + ' ')) {
-						let words = lines[i].split(/ (.*)/)
+						let words = splitOneLine(lines[i])
 						callback(null, words[1])
 						try {
 							console.log(JSON.parse(words[1]))
@@ -71,15 +94,7 @@ var SkySQL = (function() {
 						return
 					}
 				}
-			}
-
-			function getLines(text) {
-				return text.split('\n')
-			}
-
-			function splitLine(line) {
-				return line.split(/ (.*)/)
-			}
+			} */
 		}
 
 	}
