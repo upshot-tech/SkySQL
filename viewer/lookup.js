@@ -74,21 +74,6 @@ var SkySQL = (function() {
 				return line.split(/ (.*)/)
 			}
 
-
-			/* function searchInTable(lines) {
-				for (var i = 0; i < lines.length; i++){
-					if (lines[i].startsWith(searchText + ' ')) {
-						let words = splitOneLine(lines[i])
-						callback(null, words[1])
-						try {
-							console.log(JSON.parse(words[1]))
-						} catch(err) {
-							console.log('index found:', words[0])
-						}
-						return
-					}
-				}
-			} */
 		}
 
 	}
