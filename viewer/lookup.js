@@ -4,11 +4,11 @@ var SkySQL = (function() {
 		async lookup(searchText, table, index, callback) {
 			// start search
 
-			let preIndexes = await getPreIndexes(index, [searchText])
+			let preIndexes = await getIndex(index, [searchText])
 			// console.log('preIndexes', preIndexes)
 			let indexes = await getData(index, preIndexes[0], searchText)
 			// console.log('indexes', indexes)
-			let dataIndexes = await getIndex(indexes)
+			let dataIndexes = await getIndex('data', indexes)
 			// console.log('dataIndexes', dataIndexes)
 			let data = await getData('data', dataIndexes, indexes[0])
 			// console.log("data:", data)
@@ -28,15 +28,9 @@ var SkySQL = (function() {
 				return { 'lines': lines, 'dataFileType': dataFileType }
 			}
 
-			async function getPreIndexes(column, searchArr) {
+			async function getIndex(column, searchArr) {
 				let file = await readFile(table + '/' + column + "/index.txt")
 				let equality = findEquality(file, '<=', searchArr)
-				return [equality[0]]
-			}
-
-			async function getIndex(preIndexes) {
-				let file = await readFile(table + '/data/index.txt')
-				let equality = findEquality(file, '<=', preIndexes)
 				return [equality[0]]
 			}
 
