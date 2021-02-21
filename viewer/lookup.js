@@ -1,17 +1,17 @@
 
 var SkySQL = (function() {
 	return {
-		async lookup(searchText, table, index, callback) {
+		async lookup(searchText, table, column, callback) {
 			// start search
 
-			let preIndexes = await getIndex(index, [searchText])
-			// console.log('preIndexes', preIndexes)
-			let indexes = await getData(index, preIndexes[0], searchText)
-			// console.log('indexes', indexes)
+			let preIndexes = await getIndex(column, [searchText])
+			console.log('preIndexes', preIndexes)
+			let indexes = await getData(column, preIndexes, [searchText])
+			console.log('indexes', indexes)
 			let dataIndexes = await getIndex('data', indexes)
-			// console.log('dataIndexes', dataIndexes)
-			let data = await getData('data', dataIndexes, indexes[0])
-			// console.log("data:", data)
+			console.log('dataIndexes', dataIndexes)
+			let data = await getData('data', dataIndexes, indexes)
+			console.log("data:", data)
 
 			callback(null, data)
 
@@ -30,13 +30,24 @@ var SkySQL = (function() {
 
 			async function getIndex(column, searchArr) {
 				let file = await readFile(table + '/' + column + "/index.txt")
-				let equality = findEquality(file, '<=', searchArr)
-				return [equality[0]]
+				let equality = findEquality(file, '==', searchArr)
+				let lessThanEquality = findEquality(file, '<=', searchArr)
+				equality.push(lessThanEquality[lessThanEquality.length-1])
+				return equality
 			}
 
-			async function getData(column, filename, searchFor) {
-				let file = await readFile(table + '/' + column + '/' + filename)
-				return findEquality(file, '==', [searchFor])
+			async function getData(column, filenameArr, searchArr) {
+				let data = []
+
+				for await (filename of filenameArr) {
+					let file = await readFile(table + '/' + column + '/' + filename)
+					let foundArr = findEquality(file, '==', searchArr)
+					foundArr.forEach(found => {
+						data.push(found)
+					});
+				}
+
+				return data
 			}
 
 			function findEquality(file, type, requirements) {
