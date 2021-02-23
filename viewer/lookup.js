@@ -33,10 +33,9 @@ var SkySQL = (function() {
 				let equality = findEquality(file, '==', searchArr)
 				let lessThanEquality = findEquality(file, '<=', searchArr)
 				let lastLessThanEquality = lessThanEquality[lessThanEquality.length-1]
-				equality.push(lastLessThanEquality)
-
-				// TODO: make equality values unique
-
+				if (!equality.includes(lastLessThanEquality)) {
+					equality.push(lastLessThanEquality)
+				}
 				return equality
 			}
 
