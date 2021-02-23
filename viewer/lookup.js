@@ -32,7 +32,11 @@ var SkySQL = (function() {
 				let file = await readFile(table + '/' + column + "/index.txt")
 				let equality = findEquality(file, '==', searchArr)
 				let lessThanEquality = findEquality(file, '<=', searchArr)
-				equality.push(lessThanEquality[lessThanEquality.length-1])
+				let lastLessThanEquality = lessThanEquality[lessThanEquality.length-1]
+				equality.push(lastLessThanEquality)
+
+				// TODO: make equality values unique
+
 				return equality
 			}
 
