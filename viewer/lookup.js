@@ -12,6 +12,8 @@ var SkySQL = (function() {
 			console.log('dataIndexes', dataIndexes)
 			let data = await getData('data', dataIndexes, indexes)
 			console.log("data:", data)
+			let dataJSON = rawArrayToJSON(data)
+			console.log("dataJSON:", dataJSON)
 
 			callback(null, data)
 
@@ -51,6 +53,20 @@ var SkySQL = (function() {
 				}
 
 				return data
+			}
+
+			function rawArrayToJSON(rawArr) {
+				jsonArr = []
+				rawArr.forEach(raw => {
+					try {
+						var jsonData = JSON.parse(raw)
+					} catch (error) {
+						console.log('Failed to convert data:', raw)
+						throw error
+					}
+					jsonArr.push(jsonData)
+				});
+				return jsonArr
 			}
 
 			function findEquality(file, type, requirements) {
