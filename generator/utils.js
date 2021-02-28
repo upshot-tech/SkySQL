@@ -45,7 +45,7 @@ function writeData(data, tablename, folder) {
     touchDir(writefolder)
 
     // write data to files
-    console.log('writing', Math.ceil(data.length/1000), 'files')
+    // console.log('writing', Math.ceil(data.length/1000), 'files')
     if (folder == 'data') {
         var contentToWrite = 'table #\n'
     } else {
@@ -82,7 +82,7 @@ function writeData(data, tablename, folder) {
     }
 
     // WRITE indexFileContent
-    console.log('writing index file')
+    // console.log('writing index file')
     fs.writeFileSync(writefolder + '/index.txt', indexFileContent, noop)
 }
 
@@ -132,34 +132,31 @@ function unescapeQuotes(string) {
 }
 
 
-function getTablesToExport(db, callback) {
+async function getTablesToExport(db) {
     const tablesRaw = config.get('tables')
     if (tablesRaw[0].name == '*') {
         throw 'Given "*" for tables is not expected';
-        db.getAllTables(callback)
+        // await db.getAllTables()
     } else {
-        const tables = config.get('tables')
-        callback(tables)
+        return config.get('tables')
     }
 }
 
-function getColsToExport(db, table, callback) {
+async function getColsToExport(db, table) {
     if (table.columns == '*') {
-        db.getAllColumns(table.name, function(cols) {
-            let colStr = joinToString(cols)
-            callback(colStr)
-        })
+        var cols = await db.getAllColumns(table.name)
     } else {
-        let colStr = joinToString(table.columns)
-        callback(colStr)
+        var cols = table.columns
     }
+    const colStr = joinToString(cols)
+    return colStr
 }
 
-function getIndexesToExport(db, table, callback) {
+async function getIndexesToExport(db, table) {
     if (table.indexes == '*') {
-        db.getAllColumns(table.name, callback)
+        return await db.getAllColumns(table.name)
     } else {
-        callback(table.indexes)
+        return table.indexes
     }
 }
 
