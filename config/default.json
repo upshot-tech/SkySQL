@@ -1,7 +1,7 @@
 {
 	// Put your database credentials here
 	"dbConfig": {
-		"type": "mysql", // mysql
+		"type": "mysql", // mysql or postgres
 		"host": "127.0.0.1",
 		"user": "root",
 		"password": "",
