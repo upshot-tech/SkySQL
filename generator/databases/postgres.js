@@ -1,5 +1,5 @@
-const { Pool, Client } = require('pg')
-const config = require('config');
+const { Client } = require('pg')
+const config = require('config')
 
 class DB {
     constructor() {
@@ -15,25 +15,17 @@ class DB {
     }
 
     // call example: query("SELECT * FROM table WHERE aaa = :aaa AND bbb = :bbb",{ aaa: aaa, bbb: bbb })
-    query(query, callback, params = []) {
-        this.connection.query(query, params, (err, result) => {
-            // console.log('SQL result:')
-            // console.log(err ? err.stack : result.rows[0]) // Hello World!
-            try {
-                callback(result.rows)
-            } catch (error) {
-                console.log(error)
-                console.log('Query:', query)
-            }
-        })
+    async query(query, params = []) {
+        const result = await this.connection.query(query, params)
+        return result.rows
     }
 
-    end() {
-        this.connection.end();
+    async end() {
+        await this.connection.end()
     }
 
-    getPrimary(table, callback) {
-        this.query(`SELECT kcu.column_name as key_column,
+    async getPrimary(table) {
+        const result = await this.query(`SELECT kcu.column_name as key_column,
                 kcu.ordinal_position as position
             FROM information_schema.table_constraints tco
             JOIN information_schema.key_column_usage kcu 
@@ -44,37 +36,32 @@ class DB {
                 and kcu.table_name = '` + table + `'
             ORDER BY kcu.table_schema,
                 kcu.table_name,
-                position;`,
-            function (result) {
-				if (result.length==0) {
-					throw "No Primary key found!";
-				}
-                callback(result[0].key_column)
-            }
-        )
+                position;`)
+        if (result.length == 0) {
+            throw "No Primary key found!"
+        }
+        return result[0].key_column
     }
 	// returns all tables from a database as an array ['table1', 'table2']
-    getAllTables(callback) {
-        this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'", function (result) {
-            var tables = [];
-			for (var i=0; i < result.length; i++) {
-				tables.push(result[i].table_name);
-			}
-            callback(tables);
-        });
+    async getAllTables() {
+        const result = await this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'");
+        var tables = []
+        for (var i=0; i < result.length; i++) {
+            tables.push(result[i].table_name)
+        }
+        return tables
     }
 
     // returns all columns from a table as an array ['column1', 'column2']
-    getAllColumns(tableName, callback) {
-        this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'", function (result) {
-            var cols = [];
-			for (var i=0; i < result.length; i++) {
-                let colName = result[i].column_name
-                cols.push(colName)
-			}
-            
-            callback(cols);
-        });
+    async getAllColumns(tableName) {
+        const result = await this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'")
+        var cols = []
+        for (var i=0; i < result.length; i++) {
+            let colName = result[i].column_name
+            cols.push(colName)
+        }
+        
+        return cols
     }
 }
 
