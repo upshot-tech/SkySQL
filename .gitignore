@@ -108,3 +108,5 @@ dist
 /config/postgres.json
 /package-lock.json
 /.vscode
+/generator/examples/example_mysql.js
+/generator/examples/example_postgres.js

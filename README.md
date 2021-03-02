@@ -27,18 +27,12 @@ You can create a searchable dictionary or a decentralized Twitter where users ca
 
 ![Tree index](https://www.researchgate.net/profile/Philippe_Fournier_Viger/publication/263696690/figure/fig1/AS:296556428316691@1447715970966/A-Prediction-Tree-PT-Inverted-Index-II-and-Lookup-Table-LT.png)
 
-# SETUP
+# Developer SETUP
 
-- Install PostgreSQL or MySQL and import SQL dumps from `SETUP` folder.
+- Install PostgreSQL or MySQL. For MySQL testing, you can use the `generator/examples/example_database.sql`.
 
 - Install NodeJS
 
-- Copy `config/default.json` to `config/YOURFILE.json` (you can have multiple files for multiple databases)
+- Include the code from `generator/examples/example.js` to your project.
 
-- set your env:
-
-Windows:
-`set NODE_ENV=YOURFILE.json`
-
-Linux:
-`export NODE_ENV=YOURFILE.json`
+Enjoy! SkySQL will 
