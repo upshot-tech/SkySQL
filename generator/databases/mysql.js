@@ -1,11 +1,10 @@
 const mysql = require('mysql');
-const config = require('config');
 
 class DB {
-    constructor() {
-        const dbConfig = config.get('dbConfig');
-        this.connection = mysql.createConnection(dbConfig);
-        this.connection.connect();
+    constructor(config) {
+        this.config = config
+        this.connection = mysql.createConnection(config.dbConfig)
+        this.connection.connect()
     }
 
     // call example: query("SELECT * FROM table WHERE aaa = :aaa AND bbb = :bbb",{ aaa: aaa, bbb: bbb })
@@ -33,7 +32,7 @@ class DB {
 
     // returns all tables from a database as an array ['table1', 'table2']
     async getAllTables() {
-        let database = config.get('dbConfig.database')
+        let database = config.dbConfig.database
         const result = await this.query("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", database)
         var tables = []
         for (var i=0; i < result.length; i++) {

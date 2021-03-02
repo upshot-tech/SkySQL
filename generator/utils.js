@@ -1,6 +1,5 @@
 const dir = __dirname + '/../dist'
 const noop = () => {}
-const config = require('config')
 
 touchDir = function touchDir(folder) {
 	if (!fs.existsSync(folder)){
@@ -132,13 +131,13 @@ function unescapeQuotes(string) {
 }
 
 
-async function getTablesToExport(db) {
-    const tablesRaw = config.get('tables')
+async function getTablesToExport(db, config) {
+    const tablesRaw = config.tables
     if (tablesRaw[0].name == '*') {
         throw 'Given "*" for tables is not expected';
         // await db.getAllTables()
     } else {
-        return config.get('tables')
+        return config.tables
     }
 }
 

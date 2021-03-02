@@ -1,10 +1,9 @@
 const { Client } = require('pg')
-const config = require('config')
 
 class DB {
-    constructor() {
-        const dbConfig = config.get('dbConfig');
-        this.connection = new Client(dbConfig)
+    constructor(config) {
+        this.config = config
+        this.connection = new Client(config.dbConfig)
         this.connection.connect()
         this.connection.query('SELECT NOW()', (err, result) => {
             if (err !== null) {

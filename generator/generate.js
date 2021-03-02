@@ -2,21 +2,19 @@ const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex,
 		getTablesToExport, getColsToExport, getIndexesToExport, initTableName } = require('./utils')
 
 fs = require('fs')
-const config = require('config')
-
-const dbType = config.get('dbConfig.type')
-const { DB } = require('./databases/' + dbType)
-const db = new DB
 
 
-exports.generate = async function generate()  {
+exports.generate = async function generate(config)  {
+	const { DB } = require('./databases/' + config.dbConfig.type)
+	const db = new DB(config)
+	
 	// remove dist folder 
 	fs.rmdirSync(__dirname + '/../dist', { recursive: true });
 
 	// make new dist folder with initial files
 	initDataFolder()
 
-	const tables = await getTablesToExport(db)
+	const tables = await getTablesToExport(db, config)
 	// iterate on all tables
 	for (table of tables) {
 
