@@ -1,4 +1,4 @@
-var skysql = require('../generator/generate');
+var skysql = require('../../generator/generate');
 
 (async() => {
 
