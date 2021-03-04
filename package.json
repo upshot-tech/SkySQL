@@ -1,6 +1,6 @@
 {
   "name": "skysql",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Frontend-only JSON database compatible with MySQL and Postgres",
   "main": "generator/generate.js",
   "scripts": {
@@ -8,16 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DaWe35/SkySQL.git"
+    "url": "git+https://github.com/upshot-tech/SkySQL.git"
   },
   "author": "DaWe",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DaWe35/SkySQL/issues"
+    "url": "https://github.com/upshot-tech/SkySQL/issues"
   },
-  "homepage": "https://github.com/DaWe35/SkySQL#readme",
+  "homepage": "https://github.com/upshot-tech/SkySQL#readme",
   "dependencies": {
     "mysql": "^2.18.1",
     "pg": "^8.5.1"
-  }
+  },
+  "devDependencies": {},
+  "keywords": [
+    "frontend",
+    "database",
+    "skynet",
+    "upshot",
+    "radix-tree",
+    "db"
+  ]
 }
