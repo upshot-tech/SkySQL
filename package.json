@@ -1,6 +1,6 @@
 {
-  "name": "skysql",
-  "version": "0.1.1",
+  "name": "@upshot-tech/skysql",
+  "version": "0.1.2",
   "description": "Frontend-only JSON database compatible with MySQL and Postgres",
   "main": "generator/generate.js",
   "scripts": {
