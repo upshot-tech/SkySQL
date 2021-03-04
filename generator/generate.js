@@ -1,15 +1,16 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex,
 		getTablesToExport, getColsToExport, getIndexesToExport, initTableName } = require('./utils')
-
 fs = require('fs')
-
+const { SkynetClient } = require('@nebulous/skynet')
+const client = new SkynetClient()
+const dir = __dirname + '/../dist'
 
 exports.generate = async function generate(config)  {
 	const { DB } = require('./databases/' + config.dbConfig.type)
 	const db = new DB(config)
 	
 	// remove dist folder 
-	fs.rmdirSync(__dirname + '/../dist', { recursive: true });
+	fs.rmdirSync(dir, { recursive: true });
 
 	// make new dist folder with initial files
 	initDataFolder()
@@ -43,5 +44,7 @@ exports.generate = async function generate(config)  {
 		}
 	}
 	db.end()
-	return true
+	const skylink = await client.uploadDirectory(dir)
+	console.log('SkySQL data uploaded to', skylink)
+	return skylink
 }
