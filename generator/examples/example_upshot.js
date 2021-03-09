@@ -47,6 +47,6 @@ var skysql = require('../../generator/generate');
 			]
 		}
 		
-	await skysql.generate(config);
+	let skylink = await skysql.generate(config);
 
 })();

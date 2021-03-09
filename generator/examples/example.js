@@ -27,7 +27,7 @@ var skysql = require('../../generator/generate');
 			]
 		}
 	console.log('before start');
-	await skysql.generate(config);
+	let skylink = await skysql.generate(config);
 	console.log('after finish');
 
 })();
