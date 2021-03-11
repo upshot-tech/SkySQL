@@ -1,5 +1,5 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex,
-		getTablesToExport, getColsToExport, getIndexesToExport, initTableName } = require('./utils')
+		getTablesToExport, getColsToExport, getIndexesToExport, initTableName, exportObjectToFile } = require('./utils')
 fs = require('fs')
 const { SkynetClient } = require('@nebulous/skynet')
 const client = new SkynetClient()
@@ -16,6 +16,7 @@ exports.generate = async function generate(config)  {
 	initDataFolder()
 
 	const tables = await getTablesToExport(db, config)
+	let structure = []
 	// iterate on all tables
 	for (table of tables) {
 
@@ -42,8 +43,10 @@ exports.generate = async function generate(config)  {
 			indexData.sort(sortByKey)
 			writeData(indexData, table.name, index)
 		}
+		structure.push({'name': table.name, 'columns': cols, 'indexes': indexes })
 	}
 	db.end()
+	exportObjectToFile(dir + '/structure.json', structure)
 	const skylink = await client.uploadDirectory(dir)
 	console.log('SkySQL data uploaded to', skylink)
 	return skylink

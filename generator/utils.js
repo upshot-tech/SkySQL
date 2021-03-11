@@ -27,6 +27,11 @@ function initDataFolder() {
     })
 }
 
+function exportObjectToFile(fileAbsolutePath, object) {
+    let exportString = JSON.stringify(object, null, "\t")
+    fs.writeFileSync(fileAbsolutePath, exportString, noop)
+}
+
 function sortByKey(x, y) {
     if (x[0] < y[0]) {
         return -1
@@ -188,3 +193,4 @@ exports.getTablesToExport = getTablesToExport
 exports.getColsToExport = getColsToExport
 exports.getIndexesToExport = getIndexesToExport
 exports.initTableName = initTableName
+exports.exportObjectToFile = exportObjectToFile
