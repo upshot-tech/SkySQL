@@ -85,7 +85,7 @@ var SkySQL = (function() {
 									found.push(words[1])
 								}
 							} else if (type == '<=') {
-								if (words[0] <= requirement) {
+								if (parseFloat(words[0]) <= parseFloat(requirement)) {
 									found.push(words[1])
 								}
 							}
