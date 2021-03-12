@@ -102,6 +102,8 @@ function stringifyData(rawData, primaryIndex) {
             var escapedKey = rawKey
         }
 
+        escapedKey = escapedKey.toString()
+
         let tempRow = {...row}
         delete tempRow[primaryIndex]
         jsonRow = JSON.stringify(tempRow)
@@ -119,6 +121,13 @@ function stringifyIndex(rawData, primaryIndex, indexBy) {
         } else {
             var escapedKey = rawKey
         }
+
+        try {
+            escapedKey = escapedKey.toString()
+        } catch (error) {
+            // pass
+        }
+
         data.push([escapedKey, row[primaryIndex] ])
     });
     return data

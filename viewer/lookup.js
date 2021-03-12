@@ -33,7 +33,8 @@ var SkySQL = (function() {
 			async function getIndex(column, searchArr) {
 				let file = await readFile(table + '/' + column + "/index.txt")
 				let equality = findEquality(file, '==', searchArr)
-				let lessThanEquality = findEquality(file, '<=', searchArr)
+				let lessThanEquality = findEquality(file, '<', searchArr)
+				// console.log('lessThanEquality', lessThanEquality)
 				let lastLessThanEquality = lessThanEquality[lessThanEquality.length-1]
 				if (!equality.includes(lastLessThanEquality)) {
 					equality.push(lastLessThanEquality)
@@ -70,7 +71,7 @@ var SkySQL = (function() {
 			}
 
 			function findEquality(file, type, requirements) {
-				if (type !== '==' && type !== '<=') {
+				if (type !== '==' && type !== '<='  && type !== '<') {
 					throw 'Equality type ' + type + ' is not implemented'
 				}
 				let found = []
@@ -85,7 +86,11 @@ var SkySQL = (function() {
 									found.push(words[1])
 								}
 							} else if (type == '<=') {
-								if (parseFloat(words[0]) <= parseFloat(requirement)) {
+								if (words[0] <= requirement) {
+									found.push(words[1])
+								}
+							} else if (type == '<') {
+								if (words[0] < requirement) {
 									found.push(words[1])
 								}
 							}
