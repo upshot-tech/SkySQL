@@ -152,8 +152,7 @@ async function getColsToExport(db, table) {
     } else {
         var cols = table.columns
     }
-    const colStr = joinToString(cols)
-    return colStr
+    return cols
 }
 
 async function getIndexesToExport(db, table) {
@@ -194,3 +193,4 @@ exports.getColsToExport = getColsToExport
 exports.getIndexesToExport = getIndexesToExport
 exports.initTableName = initTableName
 exports.exportObjectToFile = exportObjectToFile
+exports.joinToString = joinToString

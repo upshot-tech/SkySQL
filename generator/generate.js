@@ -1,5 +1,6 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex,
-		getTablesToExport, getColsToExport, getIndexesToExport, initTableName, exportObjectToFile } = require('./utils')
+		getTablesToExport, getColsToExport, getIndexesToExport, initTableName,
+		exportObjectToFile, joinToString } = require('./utils')
 fs = require('fs')
 const { SkynetClient } = require('@nebulous/skynet')
 const client = new SkynetClient()
@@ -27,9 +28,10 @@ exports.generate = async function generate(config)  {
 		
 		// get all column names for export
 		const cols = await getColsToExport(db, table)
+		const colStr = joinToString(cols)
 
 		const tableQueryName = initTableName(table.name)
-		const rawData = await db.query('SELECT ' + cols + ' FROM ' + tableQueryName)
+		const rawData = await db.query('SELECT ' + colStr + ' FROM ' + tableQueryName)
 		const colData = stringifyData(rawData, primaryIndex)
 		// console.log('Sorting', colData.length, 'rows')
 		colData.sort(sortByKey)
