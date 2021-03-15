@@ -99,6 +99,7 @@
 	}
 	a, a:hover {
 		color: #FFF;
+		text-decoration: solid;
 	}
 	h1 {
 		margin-top: 50px;
@@ -108,12 +109,24 @@
 		margin-bottom: 50px;
 	}
 
+	.footer {
+		font-size: 80%;
+		opacity: 80%;
+		margin-top: 100px;
+	}
+
+	.footer img {
+		height: 18px;
+		vertical-align: middle;
+		margin: 2px;
+	}
+
 </style>
 
 <h1>SkySQL demo</h1>
 
 <div class="schbox">
-	<p id="print">sooooooon</p>
+	<p id="print">Let's perform a select</p>
 	<label>SELECT * FROM</label>
 	<select id="FROM" onchange="reloadCols()">
 		<option value="" selected>...</option>
@@ -127,5 +140,13 @@
 	<input id="input_str" placeholder="Type 4 letters or numbers" value="1"><button onclick="search()">Search!</button>
 </div>
 
-<p>Hey, the <a href="data/index.txt">index files</a> are human readable ;)</p>
-<p>Source: <a href="https://github.com/DaWe35/SkyLookup">GitHub</a></p>
+<p class="footer">
+	<a href="https://upshot.io/">
+		Made by 
+		<img src="https://siasky.net/AADzNKs6vpjaeLuVfTg2t_hqL0iXZa0aQwW0D00zJYERGQ">Upshot
+	</a>
+	|
+	<a href="https://github.com/Upshot-tech/SkySQL">Open source on GitHub</a>
+	|
+	<a href="https://github.com/DaWe35">developed by DaWe</a>
+</p>
