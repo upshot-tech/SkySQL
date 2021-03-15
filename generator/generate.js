@@ -17,7 +17,7 @@ exports.generate = async function generate(config)  {
 	initDataFolder()
 
 	const tables = await getTablesToExport(db, config)
-	let structure = []
+	let scheme = []
 	// iterate on all tables
 	for (table of tables) {
 
@@ -45,10 +45,10 @@ exports.generate = async function generate(config)  {
 			indexData.sort(sortByKey)
 			writeData(indexData, table.name, index)
 		}
-		structure.push({'name': table.name, 'columns': cols, 'indexes': indexes })
+		scheme.push({'name': table.name, 'columns': cols, 'indexes': indexes })
 	}
 	db.end()
-	exportObjectToFile(dir + '/structure.json', structure)
+	exportObjectToFile(dir + '/scheme.json', scheme)
 	const skylink = await client.uploadDirectory(dir)
 	console.log('SkySQL data uploaded to', skylink)
 	return skylink
