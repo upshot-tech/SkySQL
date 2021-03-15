@@ -110,3 +110,5 @@ dist
 /.vscode
 /generator/examples/example_mysql.js
 /generator/examples/example_postgres.js
+/gen.bat
+/.npmrc
