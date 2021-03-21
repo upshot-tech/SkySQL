@@ -51,7 +51,7 @@ function writeData(data, tablename, folder) {
     // write data to files
     // console.log('writing', Math.ceil(data.length/1000), 'files')
     if (folder == 'data') {
-        var contentToWrite = 'table #\n'
+        var contentToWrite = '{"fileType": "table", "dataType": "int", "divider": " "} #\n'
     } else {
         var contentToWrite = 'column_index #\n'
     }
