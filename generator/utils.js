@@ -51,11 +51,11 @@ function writeData(data, tablename, folder) {
     // write data to files
     // console.log('writing', Math.ceil(data.length/1000), 'files')
     if (folder == 'data') {
-        var contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "} #\n'
+        var contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "}\n'
     } else {
-        var contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "} #\n'
+        var contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "}\n'
     }
-    var indexFileContent = 'index #\n'
+    var indexFileContent = '{"fileType": "index", "orderType": "number", "divider": " "}\n'
     var linesInFile = 0
     var nextFileName = 0
     var firstLineInFile = ''
@@ -71,9 +71,9 @@ function writeData(data, tablename, folder) {
             fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
             linesInFile = 0
             if (folder == 'data') {
-                contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "} #\n'
+                contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "}\n'
             } else {
-                contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "} #\n'
+                contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "}\n'
             }
             indexFileContent += firstLineInFile + ' ' + nextFileName + '.txt\n'
             firstLineInFile = ''
