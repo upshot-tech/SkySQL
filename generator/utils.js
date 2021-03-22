@@ -43,7 +43,7 @@ function sortByKey(x, y) {
 }
 
 
-function writeData(data, tablename, folder) {
+function writeData(data, tablename, folder, orderType) {
     touchDir(dir + '/' + tablename)
     let writefolder = dir + '/' + tablename + '/' + folder
     touchDir(writefolder)
@@ -51,10 +51,12 @@ function writeData(data, tablename, folder) {
     // write data to files
     // console.log('writing', Math.ceil(data.length/1000), 'files')
     if (folder == 'data') {
-        var contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "}\n'
+        var fileType = 'table'
     } else {
-        var contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "}\n'
+        var fileType = 'column_index'
     }
+    var contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + orderType + '", "divider": " "}\n'
+
     var indexFileContent = '{"fileType": "index", "orderType": "number", "divider": " "}\n'
     var linesInFile = 0
     var nextFileName = 0
@@ -101,8 +103,6 @@ function stringifyData(rawData, primaryIndex) {
         } else {
             var escapedKey = rawKey
         }
-
-        escapedKey = escapedKey.toString()
 
         let tempRow = {...row}
         delete tempRow[primaryIndex]
@@ -157,7 +157,7 @@ async function getTablesToExport(db, config) {
 
 async function getColsToExport(db, table) {
     if (table.columns == '*') {
-        var cols = await db.getAllColumns(table.name)
+        var cols = await getAllColumns(db, table.name)
     } else {
         var cols = table.columns
     }
@@ -166,10 +166,20 @@ async function getColsToExport(db, table) {
 
 async function getIndexesToExport(db, table) {
     if (table.indexes == '*') {
-        return await db.getAllColumns(table.name)
+        return await getAllColumns(db, table.name)
     } else {
         return table.indexes
     }
+}
+
+// returns all columns from a table as an array ['column1', 'column2']
+async function getAllColumns(db, tableName) {
+        const result = await db.getTableStructure(tableName)
+        var columns = []
+        for (var i=0; i < result.length; i++) {
+            columns.push(result[i].col)
+        }
+        return columns
 }
 
 function joinToString(array) {

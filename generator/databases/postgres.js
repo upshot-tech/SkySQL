@@ -51,29 +51,23 @@ class DB {
         return tables
     }
 
-    // returns all columns from a table as an array ['column1', 'column2']
-    async getAllColumns(tableName) {
-        const result = await this.query("SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'")
-        var cols = []
-        for (var i=0; i < result.length; i++) {
-            let colName = result[i].column_name
-            cols.push(colName)
-        }
-        
-        return cols
-    }
 
     async getTableStructure(tableName) {
         const result = await this.query("SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'")
 
-        /* var cols = []
+        var struct = []
         for (var i=0; i < result.length; i++) {
-            let colName = result[i].column_name
-            cols.push(colName)
-        } */
+            let colStruct = {
+                'column': result[i].column_name,
+                'type': result[i].udt_name
+            }
+            struct.push(colStruct)
+        }
 
-        return result
+        return struct
     }
+
+
 }
 
 

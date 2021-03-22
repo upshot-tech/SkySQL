@@ -39,16 +39,19 @@ class DB {
             tables.push(result[i].table_name)
         }
         return tables
-    }
+    }    
 
-    // returns all columns from a table as an array ['column1', 'column2']
-    async getAllColumns(tableName) {
+    async getTableStructure(tableName) {
         const result = await this.query("show columns from " + tableName)
-        var columns = []
+        var struct = []
         for (var i=0; i < result.length; i++) {
-            columns.push(result[i].Field)
+            let colStruct = {
+                'column': result[i].Field,
+                'type': result[i].Type
+            }
+            struct.push(colStruct)
         }
-        return columns
+        return struct
     }
 	
     async getAllIndex(tableName) {
@@ -57,11 +60,6 @@ class DB {
                 AND TABLE_NAME=` + tableName + `GROUP BY table_name,non_unique")`)
         return result.index_columns
 	}
-
-    async getTableStructure(tableName) {
-        const result = await this.query("show columns from " + tableName)
-        return result
-    }
 }
 
 
