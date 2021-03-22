@@ -62,6 +62,18 @@ class DB {
         
         return cols
     }
+
+    async getTableStructure(tableName) {
+        const result = await this.query("SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'")
+
+        /* var cols = []
+        for (var i=0; i < result.length; i++) {
+            let colName = result[i].column_name
+            cols.push(colName)
+        } */
+
+        return result
+    }
 }
 
 

@@ -57,6 +57,11 @@ class DB {
                 AND TABLE_NAME=` + tableName + `GROUP BY table_name,non_unique")`)
         return result.index_columns
 	}
+
+    async getTableStructure(tableName) {
+        const result = await this.query("show columns from " + tableName)
+        return result
+    }
 }
 
 

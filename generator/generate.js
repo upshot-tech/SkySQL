@@ -20,8 +20,8 @@ exports.generate = async function generate(config)  {
 	let scheme = []
 	// iterate on all tables
 	for (table of tables) {
-
-		// get primary indexed column
+		// get table schema and primary indexed column
+		const tableSchema = await db.getTableStructure(table.name)
 		const primaryIndex = await db.getPrimary(table.name)
 		
 		console.log('Exporting "' + table.name + '" table. Primary index:', primaryIndex)
