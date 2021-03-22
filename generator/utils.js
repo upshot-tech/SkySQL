@@ -43,7 +43,7 @@ function sortByKey(x, y) {
 }
 
 
-function writeData(data, tablename, folder, orderType) {
+function writeData(data, tablename, folder, meta) {
     touchDir(dir + '/' + tablename)
     let writefolder = dir + '/' + tablename + '/' + folder
     touchDir(writefolder)
@@ -55,9 +55,9 @@ function writeData(data, tablename, folder, orderType) {
     } else {
         var fileType = 'column_index'
     }
-    var contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + orderType + '", "divider": " "}\n'
+    var contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
 
-    var indexFileContent = '{"fileType": "index", "orderType": "number", "divider": " "}\n'
+    var indexFileContent = '{"fileType": "index", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
     var linesInFile = 0
     var nextFileName = 0
     var firstLineInFile = ''
@@ -73,10 +73,11 @@ function writeData(data, tablename, folder, orderType) {
             fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
             linesInFile = 0
             if (folder == 'data') {
-                contentToWrite = '{"fileType": "table", "orderType": "number", "divider": " "}\n'
+                var fileType = 'table'
             } else {
-                contentToWrite = '{"fileType": "column_index", "orderType": "number", "divider": " "}\n'
-            }
+                var fileType = 'column_index'
+            }            
+            contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
             indexFileContent += firstLineInFile + ' ' + nextFileName + '.txt\n'
             firstLineInFile = ''
             nextFileName += 1
@@ -182,6 +183,33 @@ async function getAllColumns(db, tableName) {
         return columns
 }
 
+function getFieldType(tableSchema, index) {
+    for (const i in tableSchema) {
+        if (tableSchema[i].column == index) {
+            return tableSchema[i].type
+        }
+    }
+}
+
+function getOrderTypeFromSchema(tableSchema, index) {
+    for (const i in tableSchema) {
+        if (tableSchema[i].column == index) {
+            return {
+                'orderType': getNumberOrString(tableSchema[i].type),
+                'colType': tableSchema[i].type
+            }
+        }
+    }
+}
+
+function getNumberOrString(type) {
+    if (['int', 'int4', 'float'].includes(type.toLowerCase())) {
+        return 'number'
+    } else {
+        return 'string'
+    }
+}
+
 function joinToString(array) {
     var str = ''
     array.forEach(elem => {
@@ -213,3 +241,5 @@ exports.getIndexesToExport = getIndexesToExport
 exports.initTableName = initTableName
 exports.exportObjectToFile = exportObjectToFile
 exports.joinToString = joinToString
+exports.getOrderTypeFromSchema = getOrderTypeFromSchema
+exports.getFieldType = getFieldType
