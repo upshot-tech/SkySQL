@@ -177,7 +177,7 @@ async function getAllColumns(db, tableName) {
         const result = await db.getTableStructure(tableName)
         var columns = []
         for (var i=0; i < result.length; i++) {
-            columns.push(result[i].col)
+            columns.push(result[i].column)
         }
         return columns
 }
