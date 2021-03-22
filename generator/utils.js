@@ -122,12 +122,12 @@ function stringifyIndex(rawData, primaryIndex, indexBy) {
         } else {
             var escapedKey = rawKey
         }
-
+/* 
         try {
             escapedKey = escapedKey.toString()
         } catch (error) {
             // pass
-        }
+        } */
 
         data.push([escapedKey, row[primaryIndex] ])
     });

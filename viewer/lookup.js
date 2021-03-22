@@ -48,11 +48,11 @@ var SkySQL = (function() {
 	async function getIndex(table, column, searchArr) {
 		let file = await readFile(table + '/' + column + "/index.txt")
 		let equality = findEquality(file, '==', searchArr)
-		 console.log('equality', equality)
+		// console.log('equality', equality)
 		let lessThanEquality = findEquality(file, '<', searchArr)
-		 console.log('lessThanEquality', lessThanEquality)
+		// console.log('lessThanEquality', lessThanEquality)
 		let lastLessThanEquality = lessThanEquality[lessThanEquality.length-1]
-		if (!equality.includes(lastLessThanEquality) && lessThanEquality.lengt > 0) {
+		if (!equality.includes(lastLessThanEquality) && lessThanEquality.length > 0) {
 			equality.push(lastLessThanEquality)
 		}
 		return equality
@@ -63,7 +63,9 @@ var SkySQL = (function() {
 
 		for await (filename of filenameArr) {
 			let file = await readFile(table + '/' + column + '/' + filename)
+			// console.log('reading', table + '/' + column + '/' + filename)
 			let foundArr = findEquality(file, '==', searchArr)
+			// console.log('file, ==, searchArr', file, '==', searchArr)
 			foundArr.forEach(found => {
 				data.push(found)
 			});
