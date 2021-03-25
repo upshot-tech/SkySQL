@@ -1,6 +1,6 @@
 const { initDataFolder, sortByKey, writeData, stringifyData, stringifyIndex,
 		getTablesToExport, getColsToExport, getIndexesToExport, initTableName,
-		exportObjectToFile, joinToString } = require('./utils')
+		exportObjectToFile, joinToString, getOrderTypeFromSchema } = require('./utils')
 fs = require('fs')
 const { SkynetClient } = require('@nebulous/skynet')
 const client = new SkynetClient()
@@ -20,30 +20,32 @@ exports.generate = async function generate(config)  {
 	let scheme = []
 	// iterate on all tables
 	for (table of tables) {
-
-		// get primary indexed column
+		// get table schema and primary indexed column
+		const tableSchema = await db.getTableStructure(table.name)
 		const primaryIndex = await db.getPrimary(table.name)
 		
 		console.log('Exporting "' + table.name + '" table. Primary index:', primaryIndex)
 		
 		// get all column names for export
 		const cols = await getColsToExport(db, table)
-		const colStr = joinToString(cols)
+		const colStr = joinToString(cols, config.dbConfig.type)
 
 		const tableQueryName = initTableName(table.name)
 		const rawData = await db.query('SELECT ' + colStr + ' FROM ' + tableQueryName)
 		const colData = stringifyData(rawData, primaryIndex)
 		// console.log('Sorting', colData.length, 'rows')
 		colData.sort(sortByKey)
-		writeData(colData, table.name, 'data')
+		let metaType = getOrderTypeFromSchema(tableSchema, primaryIndex) // SCHEMA
+		writeData(colData, table.name, 'data', metaType)
 
 		const indexes = await getIndexesToExport(db, table)
 		// export all indexes
 		for (index of indexes) {
+			let metaType = getOrderTypeFromSchema(tableSchema, index) // SCHEMA
 			const indexData = stringifyIndex(rawData, primaryIndex, index)
 			//console.log('Sorting', indexData.length, 'rows')
 			indexData.sort(sortByKey)
-			writeData(indexData, table.name, index)
+			writeData(indexData, table.name, index, metaType)
 		}
 		scheme.push({'name': table.name, 'columns': cols, 'indexes': indexes })
 	}

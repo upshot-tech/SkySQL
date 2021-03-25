@@ -43,7 +43,7 @@ function sortByKey(x, y) {
 }
 
 
-function writeData(data, tablename, folder) {
+function writeData(data, tablename, folder, meta) {
     touchDir(dir + '/' + tablename)
     let writefolder = dir + '/' + tablename + '/' + folder
     touchDir(writefolder)
@@ -51,11 +51,13 @@ function writeData(data, tablename, folder) {
     // write data to files
     // console.log('writing', Math.ceil(data.length/1000), 'files')
     if (folder == 'data') {
-        var contentToWrite = 'table #\n'
+        var fileType = 'table'
     } else {
-        var contentToWrite = 'column_index #\n'
+        var fileType = 'column_index'
     }
-    var indexFileContent = 'index #\n'
+    var contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
+
+    var indexFileContent = '{"fileType": "index", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
     var linesInFile = 0
     var nextFileName = 0
     var firstLineInFile = ''
@@ -71,10 +73,11 @@ function writeData(data, tablename, folder) {
             fs.writeFileSync(writefolder + '/' + nextFileName + '.txt', contentToWrite, noop)
             linesInFile = 0
             if (folder == 'data') {
-                contentToWrite = 'table #\n'
+                var fileType = 'table'
             } else {
-                contentToWrite = 'column_index #\n'
-            }
+                var fileType = 'column_index'
+            }            
+            contentToWrite = '{"fileType": "' + fileType + '", "orderType": "' + meta.orderType + '", "colType": "' + meta.colType + '", "divider": " "}\n'
             indexFileContent += firstLineInFile + ' ' + nextFileName + '.txt\n'
             firstLineInFile = ''
             nextFileName += 1
@@ -102,8 +105,6 @@ function stringifyData(rawData, primaryIndex) {
             var escapedKey = rawKey
         }
 
-        escapedKey = escapedKey.toString()
-
         let tempRow = {...row}
         delete tempRow[primaryIndex]
         jsonRow = JSON.stringify(tempRow)
@@ -121,12 +122,12 @@ function stringifyIndex(rawData, primaryIndex, indexBy) {
         } else {
             var escapedKey = rawKey
         }
-
+/* 
         try {
             escapedKey = escapedKey.toString()
         } catch (error) {
             // pass
-        }
+        } */
 
         data.push([escapedKey, row[primaryIndex] ])
     });
@@ -157,7 +158,7 @@ async function getTablesToExport(db, config) {
 
 async function getColsToExport(db, table) {
     if (table.columns == '*') {
-        var cols = await db.getAllColumns(table.name)
+        var cols = await getAllColumns(db, table.name)
     } else {
         var cols = table.columns
     }
@@ -166,20 +167,63 @@ async function getColsToExport(db, table) {
 
 async function getIndexesToExport(db, table) {
     if (table.indexes == '*') {
-        return await db.getAllColumns(table.name)
+        return await getAllColumns(db, table.name)
     } else {
         return table.indexes
     }
 }
 
-function joinToString(array) {
+// returns all columns from a table as an array ['column1', 'column2']
+async function getAllColumns(db, tableName) {
+        const result = await db.getTableStructure(tableName)
+        var columns = []
+        for (var i=0; i < result.length; i++) {
+            columns.push(result[i].column)
+        }
+        return columns
+}
+
+function getFieldType(tableSchema, index) {
+    for (const i in tableSchema) {
+        if (tableSchema[i].column == index) {
+            return tableSchema[i].type
+        }
+    }
+}
+
+function getOrderTypeFromSchema(tableSchema, index) {
+    for (const i in tableSchema) {
+        if (tableSchema[i].column == index) {
+            return {
+                'orderType': getNumberOrString(tableSchema[i].type),
+                'colType': tableSchema[i].type
+            }
+        }
+    }
+}
+
+function getNumberOrString(type) {
+    if (['int', 'int4', 'float'].includes(type.toLowerCase())) {
+        return 'number'
+    } else {
+        return 'string'
+    }
+}
+
+function joinToString(array, dbType) {
     var str = ''
     array.forEach(elem => {
         // join cols to string
         if (str != '') {
             str += ', '
         }
-        str += '"' + elem + '"'
+        if (dbType == 'postgres') {
+            str += '"' + elem + '"'
+        } else if (dbType == 'mysql') {
+            str += '`' + elem + '`'
+        } else {
+            throw 'Database type "' + dbType + '" is not implemented'
+        }
     })
     return str
 }
@@ -203,3 +247,5 @@ exports.getIndexesToExport = getIndexesToExport
 exports.initTableName = initTableName
 exports.exportObjectToFile = exportObjectToFile
 exports.joinToString = joinToString
+exports.getOrderTypeFromSchema = getOrderTypeFromSchema
+exports.getFieldType = getFieldType

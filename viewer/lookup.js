@@ -48,10 +48,11 @@ var SkySQL = (function() {
 	async function getIndex(table, column, searchArr) {
 		let file = await readFile(table + '/' + column + "/index.txt")
 		let equality = findEquality(file, '==', searchArr)
+		// console.log('equality', equality)
 		let lessThanEquality = findEquality(file, '<', searchArr)
 		// console.log('lessThanEquality', lessThanEquality)
 		let lastLessThanEquality = lessThanEquality[lessThanEquality.length-1]
-		if (!equality.includes(lastLessThanEquality)) {
+		if (!equality.includes(lastLessThanEquality) && lessThanEquality.length > 0) {
 			equality.push(lastLessThanEquality)
 		}
 		return equality
@@ -62,7 +63,9 @@ var SkySQL = (function() {
 
 		for await (filename of filenameArr) {
 			let file = await readFile(table + '/' + column + '/' + filename)
+			// console.log('reading', table + '/' + column + '/' + filename)
 			let foundArr = findEquality(file, '==', searchArr)
+			// console.log('file, ==, searchArr', file, '==', searchArr)
 			foundArr.forEach(found => {
 				data.push(found)
 			});
@@ -86,9 +89,8 @@ var SkySQL = (function() {
 	}
 
 	function findEquality(file, type, requirements) {
-		if (type !== '==' && type !== '<='  && type !== '<') {
-			throw 'Equality type ' + type + ' is not implemented'
-		}
+		const fileStruct = JSON.parse(file.lines[0])
+		const orderType = fileStruct.orderType
 		let found = []
 		for (var i = 1; i < file.lines.length; i++) {
 			if (typeof file.lines[i] == 'undefined' || file.lines[i] == '') { // end of lines
@@ -96,24 +98,50 @@ var SkySQL = (function() {
 			} else {
 				var words = splitOneLine(file.lines[i])
 				requirements.forEach(requirement => {
-					if (type == '==') {
-						if (words[0] == requirement) {
-							found.push(words[1])
-						}
-					} else if (type == '<=') {
-						if (words[0] <= requirement) {
-							found.push(words[1])
-						}
-					} else if (type == '<') {
-						if (words[0] < requirement) {
-							found.push(words[1])
-						}
+					if (orderType == 'number') {
+						var w1 = parseFloat(words[0])
+						var w2 = parseFloat(requirement)
+					} else if (orderType == 'string') {
+						var w1 = words[0].toString()
+						var w2 = requirement.toString()
+					} else {
+						throw 'orderType ' + orderType + ' not expected'
+					}
+
+					if (compare(w1, w2, type) === true) {
+						found.push(words[1])
 					}
 				})
 			}
 		}
-		// console.log('Equality found:', found)
 		return found
+	}
+
+	function compare(w1, w2, equalityType) {
+		switch (equalityType) {
+			case '==':
+				if (w1 == w2) {
+					return true
+				}
+				break
+
+			case '<=':
+				if (w1 <= w2) {
+					return true
+				}
+				break
+
+			case '<':
+				if (w1 < w2) {
+					return true
+				}
+				break
+		
+			default:
+				throw 'Equality type ' + type + ' is not implemented'
+				break
+		}
+		return false
 	}
 
 	function splitLines(text) {
