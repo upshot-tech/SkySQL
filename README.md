@@ -1,6 +1,6 @@
 # SkySQL
 
-Demo: https://siasky.net/_AYYC9KGq009LF8mD1D2J6yjCoBm0i9yLR64pTX3aOWL6Q/index.html (13 million rows, 615 MB total size)
+Demo: https://siasky.net/LAACIfwGOUkY4WIW4262qCjKi8ihLhMJwWG-2W2AuB5ymA/ (13 million rows, 615 MB total size)
 
 While [MiniSearch](https://github.com/lucaong/minisearch) and [AlaSQL](http://alasql.org/) are great in-browser full-text & SQL engines,
 they can not handle GBs of data because of RAM limits.
