@@ -210,14 +210,20 @@ function getNumberOrString(type) {
     }
 }
 
-function joinToString(array) {
+function joinToString(array, dbType) {
     var str = ''
     array.forEach(elem => {
         // join cols to string
         if (str != '') {
             str += ', '
         }
-        str += '"' + elem + '"'
+        if (dbType == 'postgres') {
+            str += '"' + elem + '"'
+        } else if (dbType == 'mysql') {
+            str += '`' + elem + '`'
+        } else {
+            throw 'Database type "' + dbType + '" is not implemented'
+        }
     })
     return str
 }

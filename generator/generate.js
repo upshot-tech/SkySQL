@@ -28,7 +28,7 @@ exports.generate = async function generate(config)  {
 		
 		// get all column names for export
 		const cols = await getColsToExport(db, table)
-		const colStr = joinToString(cols)
+		const colStr = joinToString(cols, config.dbConfig.type)
 
 		const tableQueryName = initTableName(table.name)
 		const rawData = await db.query('SELECT ' + colStr + ' FROM ' + tableQueryName)
