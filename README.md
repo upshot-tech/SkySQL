@@ -1,6 +1,7 @@
 # SkySQL
 
-Demo: https://siasky.net/LAACIfwGOUkY4WIW4262qCjKi8ihLhMJwWG-2W2AuB5ymA/ (13 million rows, 615 MB total size)
+6105 MB demo: https://siasky.net/_AYYC9KGq009LF8mD1D2J6yjCoBm0i9yLR64pTX3aOWL6Q/index.html (13 million rows, 615 MB total size)
+Demo with Upshot's exported PostgreSQL database: https://siasky.net/LAACIfwGOUkY4WIW4262qCjKi8ihLhMJwWG-2W2AuB5ymA/
 
 While [MiniSearch](https://github.com/lucaong/minisearch) and [AlaSQL](http://alasql.org/) are great in-browser full-text & SQL engines,
 they can not handle GBs of data because of RAM limits.
