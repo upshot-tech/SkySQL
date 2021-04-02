@@ -18,12 +18,11 @@ var SkySQL = (function() {
 		console.log('dataIndexes', dataIndexes)
 
 		let data = await getData(table, 'data', dataIndexes, indexes)
-		console.log("data:", data)
 
-		let dataJSON = rawArrayToJSON(data)
-		console.log("dataJSON:", dataJSON)
+		let dataObject = rawArrayToObjects(data)
+		console.log("dataObject:", dataObject)
 
-		return data
+		return dataObject
 	}
 
 	async function getScheme() {
@@ -74,7 +73,7 @@ var SkySQL = (function() {
 		return data
 	}
 
-	function rawArrayToJSON(rawArr) {
+	function rawArrayToObjects(rawArr) {
 		jsonArr = []
 		rawArr.forEach(raw => {
 			try {

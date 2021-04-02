@@ -11,7 +11,14 @@
 		// Perform SkySQL lookup
 		try {
 			let result = await SkySQL.lookup(str, tableName, colName)
-			changePrint(result)
+			let resultJSON = JSON.stringify(result.slice(0, 10))
+
+			if (result.length > 10) {
+				var moreStr = '<br>... (' + result.length + ' total)'
+			} else {				
+				var moreStr = ''
+			}
+			changePrint(resultJSON + moreStr)
 		} catch (error) {
 			changePrint(error)
 		}
