@@ -19,7 +19,8 @@
   "dependencies": {
     "@nebulous/skynet": "^2.0.1",
     "mysql": "^2.18.1",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {},
   "keywords": [
